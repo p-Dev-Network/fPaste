@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,22 +24,23 @@ class PasteType extends AbstractType
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'Title (Optional): ',
-                    'class' => ''
+                    'class' => 'form-control is-valid'
                 ]
             ])
-            ->add('content', TextType::class, [
+            ->add('content', TextareaType::class, [
                 'label' => false,
                 'required' => true,
                 'attr' => [
                     'placeholder' => 'Insert your paste: ',
-                    'class' => ''
+                    'class' => 'form-control is-valid',
+                    'rows' => '10'
                 ]
             ])
             ->add('privacy', ChoiceType::class, [
                 'label' => false,
                 'required' => true,
                 'attr' => [
-                    'class' => ''
+                    'class' => 'form-control is-valid',
                 ],
                 'choices' => [
                     'Public' => 'public',
@@ -47,7 +49,7 @@ class PasteType extends AbstractType
             ])
             ->add('Send', SubmitType::class, [
                 'attr' => [
-                    'class' => ''
+                    'class' => 'btn btn-lg btn-send'
                 ]
             ]);
     }
