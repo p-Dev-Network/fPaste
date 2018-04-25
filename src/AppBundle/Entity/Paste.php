@@ -40,6 +40,13 @@ class Paste
     protected $date;
 
     /**
+     * @ORM\Column(type="string", nullable=false)
+     *
+     * @var string
+     */
+    protected $privacy;
+
+    /**
      * @ORM\Column(type="boolean", nullable=false)
      *
      * @var boolean
@@ -216,6 +223,22 @@ class Paste
     public function setIP($IP)
     {
         $this->IP = $IP;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrivacy()
+    {
+        return $this->privacy;
+    }
+
+    /**
+     * @param string $privacy
+     */
+    public function setPrivacy($privacy)
+    {
+        $this->privacy = $privacy;
     }
 
 }
