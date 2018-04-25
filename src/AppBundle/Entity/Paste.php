@@ -82,6 +82,13 @@ class Paste
     protected $IP;
 
     /**
+     * @ORM\Column(type="string", nullable=false)
+     *
+     * @var string
+     */
+    protected $url;
+
+    /**
      * @return int
      */
     public function getId()
@@ -239,6 +246,22 @@ class Paste
     public function setPrivacy($privacy)
     {
         $this->privacy = $privacy;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
     }
 
 }
