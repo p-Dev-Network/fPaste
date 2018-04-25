@@ -1,4 +1,4 @@
-# [fPaste](https://fpaste.me)
+# [fPaste](https://www.fpaste.me)
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://raw.githubusercontent.com/p-Dev-Network/fPaste/master/LICENSE.md)
 
