@@ -32,3 +32,12 @@ p, span, h1, h2, h3, h4, h5, a{
 .right-sepparator{
     border-right: 1px solid var(--main-font-color);
 }
+
+.mt30{
+    margin-top: 30px;
+}
+
+hr{
+    background-color: var(--main-font-color)!important;
+    width: 75%;
+}
