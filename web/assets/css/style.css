@@ -1,0 +1,34 @@
+:root {
+    --main-bg-color: black;
+    --main-font-color: #01DF01;
+}
+
+body{
+    background-color: var(--main-bg-color);
+}
+
+p, span, h1, h2, h3, h4, h5, a{
+    font-family: 'Roboto', sans-serif;
+    color: var(--main-font-color)!important;
+}
+
+.navbar{
+    background-color: var(--main-bg-color)!important;
+    border-bottom: 1px solid var(--main-font-color)!important;
+}
+
+.navbar .nav-item:hover{
+    background-color: var(--main-font-color);
+}
+
+.nav-link:hover{
+    color: var(--main-bg-color)!important;
+}
+
+.navbar-toggler-icon{
+    background-color: var(--main-font-color)!important;
+}
+
+.right-sepparator{
+    border-right: 1px solid var(--main-font-color);
+}
