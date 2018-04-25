@@ -7,7 +7,7 @@ body{
     background-color: var(--main-bg-color);
 }
 
-p, span, h1, h2, h3, h4, h5, a{
+*{
     font-family: 'Roboto', sans-serif;
     color: var(--main-font-color)!important;
 }
@@ -55,4 +55,21 @@ hr{
     background-color: var(--main-bg-color);
     border: 1px solid var(--main-font-color);
     color: var(--main-font-color);
+}
+
+.card{
+    border: 1px solid var(--main-font-color);
+}
+
+.card-header{
+    border-bottom: 1px solid var(--main-font-color);
+}
+
+.card-header, .card-body{
+    background-color: var(--main-bg-color);
+    color: gray!important;
+}
+
+.alert h4, .alert p{
+    color: black!important;
 }

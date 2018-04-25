@@ -49,11 +49,48 @@ class DefaultController extends Controller
             $em->persist($paste);
             $em->flush();
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('viewPaste', ['url' => $url]);
         }
 
         return $this->render('default/index.html.twig', [
            'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/{url}", name="viewPaste")
+     */
+    public function viewPasteAction($url, Request $request)
+    {
+        $error = 0;
+        $em = $this->getDoctrine()->getManager();
+
+        $paste = $em->getRepository('AppBundle:Paste')->findOneBy([
+            'url' => $url
+        ]);
+
+        if(!$paste){
+            $error = 404;
+        }else{
+            if($paste->isDeletedByUser()){
+                $error = 1;
+            }
+
+            if($paste->isDeletedByAdmin()){
+                $error = 2;
+            }
+        }
+
+        if($error == 0){
+            return $this->render('default/Paste/paste.html.twig', [
+                'error' => $error,
+                'paste' => $paste
+            ]);
+        }else{
+            return $this->render('default/Paste/paste.html.twig', [
+                'error' => $error
+            ]);
+        }
+
     }
 }

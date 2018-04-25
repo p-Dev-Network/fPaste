@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {% if error == 0 %}
+        {{ paste.title }}
+    {% else %}
+        {% if error == 404 %}
+            Not found!
+        {% elseif error == 1 %}
+            Deleted by User
+        {% elseif error == 2 %}
+            Deleted by Admin
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-8 m-auto">
+    {% if error == 0 %}
+        <div class="card mt30">
+            <div class="card-header text-center">
+                {{ paste.title }} | {{ paste.date | date("d-m-Y H:i:s") }}
+            </div>
+
+            <div class="card-body">
+                {{ paste.content }}
+            </div>
+        </div>
+
+
+    {% elseif error == 404 %}
+        <div class="alert alert-danger text-center" role="alert">
+            <h4 class="alert-heading">Not Found!</h4>
+            <p class="mb-0">This paste not exist. Have you write the URL correctly?</p>
+        </div>
+    {% elseif error == 1 %}
+        <div class="alert alert-danger text-center" role="alert">
+            <h4 class="alert-heading">Deleted by User!</h4>
+            <p class="mb-0">This paste has been deleted by user.</p>
+        </div>
+    {% elseif error == 2 %}
+        <div class="alert alert-danger text-center" role="alert">
+            <h4 class="alert-heading">Deleted by Admin!</h4>
+            <p class="mb-0">This paste has been deleted by the admin.</p>
+        </div>
+    {% endif %}
+    </div>
+{% endblock %}
