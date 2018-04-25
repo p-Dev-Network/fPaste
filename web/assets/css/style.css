@@ -77,3 +77,19 @@ hr{
 th, td{
     border: 1px solid var(--main-font-color)!important;
 }
+
+footer{
+    border-top: 1px solid var(--main-font-color);
+}
+
+.footer-logo img{
+    width: 20%;
+}
+
+.footer-logo p{
+    margin-bottom: 0!important;
+}
+
+.hr-small{
+    width: 25%;
+}
