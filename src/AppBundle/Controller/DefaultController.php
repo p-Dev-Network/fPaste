@@ -17,6 +17,9 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $uniqueURL = false;
+
         $paste = new Paste();
         $form = $this->createForm(PasteType::class, $paste);
         $form->handleRequest($request);
@@ -26,7 +29,18 @@ class DefaultController extends Controller
             $paste->setDeleteDate(null);
             $paste->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
 
-            $em = $this->getDoctrine()->getManager();
+            do{
+                $url = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+                $em->getRepository('AppBundle:Paste')->findOneBy([
+                    'url' => $url
+                ]);
+
+                if(!$url){
+                    $paste->setUrl($url);
+                    $uniqueURL = true;
+                }
+            }while($uniqueURL == false);
+
             $em->persist($paste);
             $em->flush();
 
