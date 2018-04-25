@@ -65,11 +65,15 @@ hr{
     border-bottom: 1px solid var(--main-font-color);
 }
 
-.card-header, .card-body{
+.card-header, .card-body, th{
     background-color: var(--main-bg-color);
     color: gray!important;
 }
 
 .alert h4, .alert p{
     color: black!important;
+}
+
+th, td{
+    border: 1px solid var(--main-font-color)!important;
 }

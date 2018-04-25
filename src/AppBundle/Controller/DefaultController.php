@@ -58,7 +58,29 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/last", name="lastPastes")
+     */
+    public function lastPastesAction()
+    {
+        $last = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
+            'privacy' => 'public',
+            'isActive' => true,
+            'isDeletedByAdmin' => false,
+            'isDeletedByUser' => false,
+        ],[
+            'date' => 'DESC'
+        ], 10);
+
+        return $this->render('default/Paste/last.html.twig', [
+            'pastes' => $last
+        ]);
+    }
+
+    /**
      * @Route("/{url}", name="viewPaste")
+     * @param $url
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewPasteAction($url, Request $request)
     {
