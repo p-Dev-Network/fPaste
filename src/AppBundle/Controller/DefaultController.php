@@ -25,17 +25,22 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            if(!$paste->getTitle()){
+                $paste->setTitle('Untitled');
+            }
+
             $paste->setDate(new \DateTime("now"));
             $paste->setDeleteDate(null);
             $paste->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
 
+
             do{
                 $url = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
-                $em->getRepository('AppBundle:Paste')->findOneBy([
+                $check = $em->getRepository('AppBundle:Paste')->findOneBy([
                     'url' => $url
                 ]);
 
-                if(!$url){
+                if(!$check){
                     $paste->setUrl($url);
                     $uniqueURL = true;
                 }

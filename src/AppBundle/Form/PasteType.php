@@ -21,7 +21,7 @@ class PasteType extends AbstractType
         $builder
             ->add('title', TextType::class, [
                 'label' => false,
-                'required' => true,
+                'required' => false,
                 'attr' => [
                     'placeholder' => 'Title (Optional): ',
                     'class' => 'form-control is-valid'
@@ -49,7 +49,7 @@ class PasteType extends AbstractType
             ])
             ->add('Send', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-lg btn-send'
+                    'class' => 'btn btn-lg btn-send is-valid'
                 ]
             ]);
     }
