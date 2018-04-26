@@ -129,4 +129,8 @@ footer{
     .responsive-center-header{
         text-align: center!important;
     }
+
+    .card-footer div{
+        text-align: center!important;
+    }
 }
