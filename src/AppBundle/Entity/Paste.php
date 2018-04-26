@@ -89,7 +89,7 @@ class Paste
     protected $url;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="paste")
      *
      * @var User
      */
