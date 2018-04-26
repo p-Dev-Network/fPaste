@@ -93,3 +93,8 @@ footer{
 .hr-small{
     width: 25%;
 }
+
+.formError ul li, .formError h2{
+    color: var(--main-bg-color)!important;
+    list-style: none;
+}
