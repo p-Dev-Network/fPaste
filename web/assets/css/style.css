@@ -29,8 +29,8 @@ body{
     background-color: var(--main-font-color)!important;
 }
 
-.right-sepparator{
-    border-right: 1px solid var(--main-font-color);
+.left-sepparator{
+    border-left: 1px solid var(--main-font-color);
 }
 
 .mt30{
