@@ -20,6 +20,7 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $user = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $uniqueURL = false;
 
@@ -56,7 +57,8 @@ class DefaultController extends Controller
         }
 
         return $this->render('default/index.html.twig', [
-           'form' => $form->createView()
+            'form' => $form->createView(),
+            'user' => $user
         ]);
     }
 
@@ -114,7 +116,8 @@ class DefaultController extends Controller
             }
 
             return $this->render('default/signUp.html.twig', [
-                'form' => $form->createView()
+                'form' => $form->createView(),
+                'user' => $user
             ]);
         }else{
             return $this->redirectToRoute('homepage');
@@ -129,6 +132,8 @@ class DefaultController extends Controller
      */
     public function viewPasteAction($url, Request $request, AuthenticationUtils $authenticationUtils)
     {
+        $user = $this->getUser();
+
         if($url == 'login') {
             $error = $authenticationUtils->getLastAuthenticationError();
 
@@ -137,6 +142,7 @@ class DefaultController extends Controller
             return $this->render('default/security.html.twig', array(
                 'last_username' => $lastUsername,
                 'error' => $error,
+                'user' => $user
             ));
         }else{
             $error = 0;
@@ -161,11 +167,13 @@ class DefaultController extends Controller
             if($error == 0){
                 return $this->render('default/Paste/paste.html.twig', [
                     'error' => $error,
-                    'paste' => $paste
+                    'paste' => $paste,
+                    'user' => $user
                 ]);
             }else{
                 return $this->render('default/Paste/paste.html.twig', [
-                    'error' => $error
+                    'error' => $error,
+                    'user' => $user
                 ]);
             }
         }
