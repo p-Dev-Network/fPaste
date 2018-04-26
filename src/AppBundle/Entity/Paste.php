@@ -89,11 +89,34 @@ class Paste
     protected $url;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false)
+     *
+     * @var boolean
+     */
+    protected $isAnonymous;
+
+    /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="paste")
      *
      * @var User
      */
     protected $user;
+
+    /**
+     * @return bool
+     */
+    public function isAnonymous()
+    {
+        return $this->isAnonymous;
+    }
+
+    /**
+     * @param bool $isAnonymous
+     */
+    public function setIsAnonymous($isAnonymous)
+    {
+        $this->isAnonymous = $isAnonymous;
+    }
 
     /**
      * @return User

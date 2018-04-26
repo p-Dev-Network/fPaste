@@ -37,6 +37,19 @@ class DefaultController extends Controller
             $paste->setDeleteDate(null);
             $paste->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
 
+            if($user){
+                if(isset($_POST['isAnonymous'])){
+                    if($_POST['isAnonymous'] == 'anonymous'){
+                        $paste->setIsAnonymous(true);
+                    }
+                }else{
+                    $paste->setIsAnonymous(false);
+                }
+
+                $paste->setUser($user);
+            }else{
+                $paste->setIsAnonymous(true);
+            }
 
             do{
                 $url = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
@@ -75,6 +88,8 @@ class DefaultController extends Controller
      */
     public function lastPastesAction()
     {
+        $user = $this->getUser();
+
         $last = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
             'privacy' => 'public',
             'isActive' => true,
@@ -85,7 +100,8 @@ class DefaultController extends Controller
         ], 10);
 
         return $this->render('default/Paste/last.html.twig', [
-            'pastes' => $last
+            'pastes' => $last,
+            'user' => $user
         ]);
     }
 

@@ -18,6 +18,12 @@
                 {{ form_widget(form.content) }}
             </div>
 
+            {% if user %}
+                <div class="col-md-12 mb20">
+                    <input name="isAnonymous" type="checkbox" value="anonymous"> Send anonymous?
+                </div>
+            {% endif %}
+
             <div class="col-md-12 mb20 text-center">
                 {{ form_widget(form.Send) }}
             </div>
