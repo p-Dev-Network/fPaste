@@ -89,6 +89,29 @@ class Paste
     protected $url;
 
     /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="")
+     *
+     * @var User
+     */
+    protected $user;
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
+    /**
      * @return int
      */
     public function getId()

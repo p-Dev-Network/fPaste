@@ -3,10 +3,13 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Paste;
+use AppBundle\Entity\User;
 use AppBundle\Form\PasteType;
+use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class DefaultController extends Controller
 {
@@ -77,42 +80,84 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/signup", name="signUp")
+     */
+    public function signUpAction(Request $request)
+    {
+        $user = $this->getUser();
+
+        if(!$user){
+            $user = new User();
+            $form = $this->createForm(UserType::class, $user);
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid()){
+                $user->setSignUpDate(new \DateTime("now"));
+                $password = $this->get('security.password_encoder');
+                $user->setPassword($password->encodePassword($user, $form->get('password')->get('first')->getData()));
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+
+                return $this->redirectToRoute('login');
+            }
+
+            return $this->render('default/signUp.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }else{
+            return $this->redirectToRoute('homepage');
+        }
+    }
+
+    /**
      * @Route("/{url}", name="viewPaste")
      * @param $url
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewPasteAction($url, Request $request)
+    public function viewPasteAction($url, Request $request, AuthenticationUtils $authenticationUtils)
     {
-        $error = 0;
-        $em = $this->getDoctrine()->getManager();
+        if($url == 'login'){
+            $error = $authenticationUtils->getLastAuthenticationError();
 
-        $paste = $em->getRepository('AppBundle:Paste')->findOneBy([
-            'url' => $url
-        ]);
+            $lastUsername = $authenticationUtils->getLastUsername();
 
-        if(!$paste){
-            $error = 404;
+            return $this->render('default/security.html.twig', array(
+                'last_username' => $lastUsername,
+                'error'         => $error,
+            ));
         }else{
-            if($paste->isDeletedByUser()){
-                $error = 1;
+            $error = 0;
+            $em = $this->getDoctrine()->getManager();
+
+            $paste = $em->getRepository('AppBundle:Paste')->findOneBy([
+                'url' => $url
+            ]);
+
+            if(!$paste){
+                $error = 404;
+            }else{
+                if($paste->isDeletedByUser()){
+                    $error = 1;
+                }
+
+                if($paste->isDeletedByAdmin()){
+                    $error = 2;
+                }
             }
 
-            if($paste->isDeletedByAdmin()){
-                $error = 2;
+            if($error == 0){
+                return $this->render('default/Paste/paste.html.twig', [
+                    'error' => $error,
+                    'paste' => $paste
+                ]);
+            }else{
+                return $this->render('default/Paste/paste.html.twig', [
+                    'error' => $error
+                ]);
             }
         }
-
-        if($error == 0){
-            return $this->render('default/Paste/paste.html.twig', [
-                'error' => $error,
-                'paste' => $paste
-            ]);
-        }else{
-            return $this->render('default/Paste/paste.html.twig', [
-                'error' => $error
-            ]);
-        }
-
     }
 }
