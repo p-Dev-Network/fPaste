@@ -79,6 +79,29 @@ class User implements UserInterface
     protected $visit;
 
     /**
+     * @ORM\OneToMany(targetEntity="Support", mappedBy="user")
+     *
+     * @var Support
+     */
+    protected $support;
+
+    /**
+     * @return Support
+     */
+    public function getSupport()
+    {
+        return $this->support;
+    }
+
+    /**
+     * @param Support $support
+     */
+    public function setSupport($support)
+    {
+        $this->support = $support;
+    }
+
+    /**
      * @return Visit
      */
     public function getVisit()

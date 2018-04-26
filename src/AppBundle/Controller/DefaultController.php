@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Paste;
+use AppBundle\Entity\Support;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Visit;
 use AppBundle\Form\PasteType;
+use AppBundle\Form\SupportType;
 use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -82,6 +84,42 @@ class DefaultController extends Controller
     public function logoutAction()
     {
         return $this->redirectToRoute('login');
+    }
+
+    /**
+     * @Route("/support", name="support")
+     */
+    public function supportAction(Request $request){
+        $user = $this->getUser();
+        $error = 1;
+
+        $support = new Support();
+        $form = $this->createForm(SupportType::class, $support);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $support->setDate(new \DateTime("now"));
+            $support->setIsReaded(false);
+            $support->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
+
+            if($user){
+                $support->setUser($user);
+            }else{
+                $support->setUser(null);
+            }
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($support);
+            $em->flush();
+
+            $error = 0;
+        }
+
+        return $this->render('default/support.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
+            'error' => $error
+        ]);
     }
 
     /**

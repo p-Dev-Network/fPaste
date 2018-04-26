@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Support{% endblock %}
+
+{% block body %}
+    <div class="col-md-8 m-auto">
+        {% if error == 0 %}
+            <div class="alert alert-success" role="alert">
+                Your message has been sent. We will reply you as soon as possible. Thank you.
+            </div>
+        {% endif %}
+        {{ form_start(form) }}
+            <div class="mt30">
+                {{ form_widget(form.email) }}
+            </div>
+
+            <div class="mt30">
+                {{ form_widget(form.category) }}
+            </div>
+
+            <div class="mt30">
+                {{ form_widget(form.message) }}
+            </div>
+
+            <div class="mt30 text-center">
+                {{ form_widget(form.Send) }}
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
