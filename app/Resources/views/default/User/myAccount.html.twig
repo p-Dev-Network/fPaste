@@ -3,5 +3,71 @@
 {% block title %}My Account{% endblock %}
 
 {% block body %}
+    <div class="col-md-8 m-auto">
+        <div class="card mt30">
+            <div class="card-header card-dark text-center account">
+                <h2>My Account - {{ user.username }}</h2>
+            </div>
 
+            <div class="card-body">
+                <h4 class="mt30">New Email</h4>
+                {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col-md-12 ">
+                            <div class="input-group">
+                                {{ form_widget(form.email) }}
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text myaccount-button">{{ form_widget(form.Change) }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{ form_end(form) }}
+
+                {% if error == 99 %}
+                    <div class="alert alert-success mt30" role="alert">
+                        Email changed successfully
+                    </div>
+                {% elseif error == 1 %}
+                    <div class="alert alert-danger mt30" role="alert">
+                        This email is already in use
+                    </div>
+                {% endif %}
+
+                <h4 class="mt30">Change Password</h4>
+                {{ form_start(formPassword) }}
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_widget(formPassword.password.first) }}
+                            </div>
+
+                            <div class="col-md-6">
+                                {{ form_widget(formPassword.password.second) }}
+                            </div>
+                        </div>
+
+                        <div class="text-center">
+                            {{ form_widget(formPassword.Change) }}
+                        </div>
+                    </div>
+                </div>
+                {{ form_end(formPassword) }}
+
+                {% if error == 98 %}
+                    <div class="alert alert-success mt30" role="alert">
+                        Password changed successfully
+                    </div>
+                {% else %}
+                    {% if form_errors(formPassword.password.first) %}
+                        <div class="alert alert-danger formError mt30" role="alert">
+                            <b>{{ form_errors(formPassword.password.first) }}</b>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
 {% endblock %}

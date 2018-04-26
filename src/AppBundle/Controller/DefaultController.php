@@ -106,7 +106,6 @@ class DefaultController extends Controller
         ]);
     }
 
-
     /**
      * @Route("/signup", name="signUp")
      * @param Request $request
