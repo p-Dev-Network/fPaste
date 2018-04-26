@@ -103,6 +103,29 @@ class Paste
     protected $user;
 
     /**
+     * @ORM\OneToMany(targetEntity="Visit", mappedBy="paste")
+     *
+     * @var Visit
+     */
+    protected $visit;
+
+    /**
+     * @return Visit
+     */
+    public function getVisit()
+    {
+        return $this->visit;
+    }
+
+    /**
+     * @param Visit $visit
+     */
+    public function setVisit($visit)
+    {
+        $this->visit = $visit;
+    }
+
+    /**
      * @return bool
      */
     public function isAnonymous()

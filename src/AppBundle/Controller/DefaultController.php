@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Paste;
 use AppBundle\Entity\User;
+use AppBundle\Entity\Visit;
 use AppBundle\Form\PasteType;
 use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -106,9 +107,10 @@ class DefaultController extends Controller
     }
 
 
-
     /**
      * @Route("/signup", name="signUp")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function signUpAction(Request $request)
     {
@@ -144,6 +146,7 @@ class DefaultController extends Controller
      * @Route("/{url}", name="viewPaste")
      * @param $url
      * @param Request $request
+     * @param AuthenticationUtils $authenticationUtils
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function viewPasteAction($url, Request $request, AuthenticationUtils $authenticationUtils)
@@ -168,6 +171,8 @@ class DefaultController extends Controller
                 'url' => $url
             ]);
 
+            $visit = new Visit();
+
             if(!$paste){
                 $error = 404;
             }else{
@@ -178,6 +183,19 @@ class DefaultController extends Controller
                 if($paste->isDeletedByAdmin()){
                     $error = 2;
                 }
+
+                if($user){
+                    $visit->setUser($user);
+                }else{
+                    $visit->setUser(null);
+                }
+
+                $visit->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
+                $visit->setDate(new \DateTime("now"));
+                $visit->setPaste($paste);
+
+                $em->persist($visit);
+                $em->flush();
             }
 
             if($error == 0){

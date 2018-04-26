@@ -22,7 +22,7 @@
                     <tr>
                         <td><a href="{{ path('viewPaste', {'url': paste.url}) }}" target="_blank">{{ paste.title }}</a></td>
                         <td>{{ paste.date | date('d-m-Y h:i:s') }}</td>
-                        <td>0</td>
+                        <td>{{ paste.visit | length }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

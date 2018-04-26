@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Pastes{% endblock %}
+
+{% block body %}
+    <div class="col-md-10 m-auto">
+        <table class="table table-bordered mt30">
+            <thead class="thead-dark text-center">
+            <tr>
+                <th>Paste</th>
+                <th>Date</th>
+                <th>Privacy</th>
+                <th>Author</th>
+                <th>Visits</th>
+            </tr>
+            </thead>
+            <tbody class="text-center">
+            {% for paste in pastes %}
+                <tr>
+                    <td><a href="{{ path('viewPaste', {'url': paste.url}) }}" target="_blank">{{ paste.title }}</a></td>
+                    <td>{{ paste.date | date('d-m-Y h:i:s') }}</td>
+                    <td>{{ paste.privacy }}</td>
+                    <td>
+                        {% if paste.isAnonymous == true %}
+                            Anonymous
+                        {% else %}
+                            You
+                        {% endif %}
+                    </td>
+                    <td>{{ paste.visit | length }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

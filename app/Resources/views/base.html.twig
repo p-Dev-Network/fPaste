@@ -19,22 +19,29 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+
+                    </ul>
+
                     <ul class="navbar-nav ml-auto">
-                        <li class="nav-item active right-sepparator">
-                            <a class="nav-link" href="{{ path('homepage') }}">Home <span class="sr-only">(current)</span></a>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{{ path('homepage') }}">New Paste <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ path('lastPastes') }}">Last 10 Pastes</a>
                         </li>
-                    </ul>
-
-                    <ul class="navbar-nav ml-auto">
                         {% if user %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('myAccount') }}">My Account</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('myPastes') }}">My Pastes</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('logout') }}">Logout</a>
                             </li>
                         {% else %}
-                            <li class="nav-item right-sepparator">
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ path('login') }}">Login</a>
                             </li>
                             <li class="nav-item">

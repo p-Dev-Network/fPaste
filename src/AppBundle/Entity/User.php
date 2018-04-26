@@ -72,6 +72,29 @@ class User implements UserInterface
     protected $paste;
 
     /**
+     * @ORM\OneToMany(targetEntity="Visit", mappedBy="user")
+     *
+     * @var Visit
+     */
+    protected $visit;
+
+    /**
+     * @return Visit
+     */
+    public function getVisit()
+    {
+        return $this->visit;
+    }
+
+    /**
+     * @param Visit $visit
+     */
+    public function setVisit($visit)
+    {
+        $this->visit = $visit;
+    }
+
+    /**
      * @return int
      */
     public function getId()
