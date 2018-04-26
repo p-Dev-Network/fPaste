@@ -61,6 +61,14 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/logout", name="logout")
+     */
+    public function logoutAction()
+    {
+        return $this->redirectToRoute('login');
+    }
+
+    /**
      * @Route("/last", name="lastPastes")
      */
     public function lastPastesAction()
@@ -78,6 +86,8 @@ class DefaultController extends Controller
             'pastes' => $last
         ]);
     }
+
+
 
     /**
      * @Route("/signup", name="signUp")
@@ -119,14 +129,14 @@ class DefaultController extends Controller
      */
     public function viewPasteAction($url, Request $request, AuthenticationUtils $authenticationUtils)
     {
-        if($url == 'login'){
+        if($url == 'login') {
             $error = $authenticationUtils->getLastAuthenticationError();
 
             $lastUsername = $authenticationUtils->getLastUsername();
 
             return $this->render('default/security.html.twig', array(
                 'last_username' => $lastUsername,
-                'error'         => $error,
+                'error' => $error,
             ));
         }else{
             $error = 0;
