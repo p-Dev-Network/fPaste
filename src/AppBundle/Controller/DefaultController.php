@@ -87,6 +87,18 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/faq", name="faq")
+     */
+    public function faqAction()
+    {
+        $user = $this->getUser();
+
+        return $this->render('default/Info/faq.html.twig', [
+            'user' => $user
+        ]);
+    }
+
+    /**
      * @Route("/support", name="support")
      */
     public function supportAction(Request $request){

@@ -65,7 +65,16 @@ hr{
     border-bottom: 1px solid var(--main-font-color);
 }
 
-.card-header, .card-body, th, .account h2{
+.faq .faq-header, .faq .faq-header h2{
+    background-color: gray!important;
+    color: var(--main-bg-color)!important;
+}
+
+.faq-body p{
+    color: gray!important;
+}
+
+.card-header, .card-body, th, .account h2, .faq-header h2{
     background-color: var(--main-bg-color)!important;
     color: gray!important;
 }

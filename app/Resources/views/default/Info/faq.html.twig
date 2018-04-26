@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block body %}
+<div class="col-md-8 m-auto">
+    <div class="card faq mt30">
+        <div class="card-header text-center faq-header">
+            <h2>FAQ</h2>
+        </div>
+
+        <div class="card-body faq-body">
+            <div class="col-md-12 m-auto">
+                <h3>What is fPaste.me?</h3>
+                <p>fPaste.me is a free, anonymous, minimalist and open source paste tool. You can send some text and share with some people quickly and easily.</p>
+
+                <hr/>
+
+                <h3>How much does it cost to use fPaste.me?</h3>
+                <p>Nothing. fPaste is totally free.</p>
+
+                <hr/>
+
+                <h3>fPaste is free. Well. How is it financed?</h3>
+                <p>fPaste is financed through the ads of our sponsors and user donations.</p>
+
+                <hr/>
+
+                <h3>Are my data protected?</h3>
+                <p>Totally. We use encryption algorithms to avoid attacks on the database. In addition, we never sell user information to other companies.</p>
+
+                <hr/>
+
+                <h3>I am developer. Can I see the fPaste's code?</h3>
+                <p>Sure. fPaste is Open Source. You can see the code in this URL: <a href="https://github.com/p-Dev-Network/fPaste" target="_blank">https://github.com/p-Dev-Network/fPaste</a> </p>
+
+                <hr/>
+
+                <h3>What is the difference between a public or private paste?</h3>
+                <p>A public paste is accessible by anyone through the platform. A private paste is only accessible to those who know the URL.</p>
+
+                <hr/>
+
+                <h3>How can I see all my pastes?</h3>
+                <p>You can see all your pastes sent with your user account through the "My Pastes" link at the top of the platform or through the following link: <a href="{{ path('myPastes') }}">https://fpaste.me/user/myPastes</a></p>
+
+                <hr/>
+
+                <h3>I found illegal content. How do I report it?</h3>
+                <p>At fPaste we take illegal content very seriously. If you find illegal content, please report it by sending a message to support or through the following link: <a href="{{ path('support') }}">https://fpaste.me/support</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
