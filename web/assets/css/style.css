@@ -111,3 +111,9 @@ footer{
 .myaccount-button button{
     border: 1px solid var(--main-bg-color);
 }
+
+@media only screen and (max-width: 770px) {
+    .responsive-center-header{
+        text-align: center!important;
+    }
+}

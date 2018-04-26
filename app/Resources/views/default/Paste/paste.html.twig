@@ -19,7 +19,23 @@
     {% if error == 0 %}
         <div class="card mt30">
             <div class="card-header text-center">
-                {{ paste.title }} | {{ paste.date | date("d-m-Y H:i:s") }}
+                <div class="row">
+                    <div class="col-md-4 text-left responsive-center-header">
+                        {{ paste.title }}
+                    </div>
+
+                    <div class="col-md-4 text-center responsive-center-header">
+                        {{ paste.date | date("d-m-Y H:i:s") }}
+                    </div>
+
+                    <div class="col-md-4 text-right responsive-center-header">
+                        {% if paste.isAnonymous %}
+                            Anonymous
+                        {% else %}
+                            {{ paste.user.username }}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
 
             <div class="card-body">
