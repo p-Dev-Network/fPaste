@@ -3,17 +3,18 @@
 {% block title %}Last 10 Pastes{% endblock %}
 
 {% block body %}
-    <div class="col-md-8 m-auto">
+    <div class="col-md-10 m-auto">
         {% if pastes | length == 0 %}
             <div class="alert alert-warning text-center" role="alert">
                 <p>Not pastes found. <a href="{{ path('homepage') }}">Create the first.</a></p>
             </div>
         {% else %}
-            <table class="table table-bordered">
+            <table class="table table-bordered mt30">
                 <thead class="thead-dark text-center">
                 <tr>
                     <th>Paste</th>
                     <th>Date</th>
+                    <th>Author</th>
                     <th>Visits</th>
                 </tr>
                 </thead>
@@ -22,6 +23,13 @@
                     <tr>
                         <td><a href="{{ path('viewPaste', {'url': paste.url}) }}" target="_blank">{{ paste.title }}</a></td>
                         <td>{{ paste.date | date('d-m-Y h:i:s') }}</td>
+                        <td>
+                            {% if paste.isAnonymous %}
+                                Anonymous
+                            {% else %}
+                                {{ paste.user.username }}
+                            {% endif %}
+                        </td>
                         <td>{{ paste.visit | length }}</td>
                     </tr>
                 {% endfor %}
