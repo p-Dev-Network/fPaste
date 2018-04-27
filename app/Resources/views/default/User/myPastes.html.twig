@@ -5,35 +5,37 @@
 {% block body %}
     <div class="col-md-10 m-auto">
         <h3 class="mt30">Number of Pastes: {{ pastes | length }}</h3>
-        <table class="table table-bordered mt30">
-            <thead class="thead-dark text-center">
-            <tr>
-                <th>Paste</th>
-                <th>Date</th>
-                <th>Privacy</th>
-                <th>Author</th>
-                <th>Visits</th>
-                <th>Options</th>
-            </tr>
-            </thead>
-            <tbody class="text-center">
-            {% for paste in pastes %}
+        <div class="table-responsive">
+            <table class="table table-bordered mt30">
+                <thead class="thead-dark text-center">
                 <tr>
-                    <td><a href="{{ path('viewPaste', {'url': paste.url}) }}" target="_blank">{{ paste.title }}</a></td>
-                    <td>{{ paste.date | date('d-m-Y h:i:s') }}</td>
-                    <td>{{ paste.privacy }}</td>
-                    <td>
-                        {% if paste.isAnonymous == true %}
-                            Anonymous
-                        {% else %}
-                            You
-                        {% endif %}
-                    </td>
-                    <td>{{ paste.visit | length }}</td>
-                    <td><a href="{{ path('deletePaste', {'url': paste.url}) }}" title="Remove Paste"><i class="fa fa-remove remove"></i></a></td>
+                    <th>Paste</th>
+                    <th>Date</th>
+                    <th>Privacy</th>
+                    <th>Author</th>
+                    <th>Visits</th>
+                    <th>Options</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="text-center">
+                {% for paste in pastes %}
+                    <tr>
+                        <td><a href="{{ path('viewPaste', {'url': paste.url}) }}" target="_blank">{{ paste.title }}</a></td>
+                        <td>{{ paste.date | date('d-m-Y h:i:s') }}</td>
+                        <td>{{ paste.privacy }}</td>
+                        <td>
+                            {% if paste.isAnonymous == true %}
+                                Anonymous
+                            {% else %}
+                                You
+                            {% endif %}
+                        </td>
+                        <td>{{ paste.visit | length }}</td>
+                        <td><a href="{{ path('deletePaste', {'url': paste.url}) }}" title="Remove Paste"><i class="fa fa-remove remove"></i></a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
