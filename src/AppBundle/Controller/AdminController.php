@@ -40,4 +40,34 @@ class AdminController extends Controller
         }
     }
 
+    /**
+     * @Route("/users/{id}", name="adminUserProfile")
+     */
+    public function adminUserProfile($id)
+    {
+        $user = $this->getUser();
+
+        if($user){
+            if($user->isAdmin()){
+                $u = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
+
+                if($u){
+                    $error = 0;
+                }else{
+                    $error = 1;
+                }
+
+                return $this->render('default/Admin/user.html.twig', [
+                    'user' => $user,
+                    'u' => $u,
+                    'error' => $error
+                ]);
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
 }

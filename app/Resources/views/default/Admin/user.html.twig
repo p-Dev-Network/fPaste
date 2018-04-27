@@ -1,0 +1,22 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="col-md-10 m-auto text-center">
+            <h1 class="mt30">User Profile</h1>
+            <hr/>
+
+            <div class="col-md-10 m-auto">
+                {% if error == 0 %}
+
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        <h4>This user not exists.</h4>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

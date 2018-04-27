@@ -39,10 +39,12 @@
                                         {% for u in users %}
                                             <tr>
                                                 <td>{{ u.id }}</td>
-                                                <td>{{ u.username }}</td>
+                                                <td><a href="{{ path('adminUserProfile', {'id': u.id}) }}">{{ u.username }}</a></td>
                                                 <td>{{ u.email }}</td>
                                                 <td>{{ u.paste | length }}</td>
-                                                <td></td>
+                                                <td>
+                                                    <i class="fa fa-user-times remove"></i>
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -65,7 +67,7 @@
                                         {% for u in suspendedUsers %}
                                             <tr>
                                                 <td>{{ u.id }}</td>
-                                                <td>{{ u.username }}</td>
+                                                <td><a href="{{ path('adminUserProfile', {'id': u.id}) }}">{{ u.username }}</a></td>
                                                 <td>{{ u.email }}</td>
                                                 <td>{{ u.paste | length }}</td>
                                                 <td></td>
