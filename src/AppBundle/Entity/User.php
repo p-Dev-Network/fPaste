@@ -93,6 +93,29 @@ class User implements UserInterface
     protected $isAdmin = false;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Report", mappedBy="user")
+     *
+     * @var Report
+     */
+    protected $report;
+
+    /**
+     * @return Report
+     */
+    public function getReport()
+    {
+        return $this->report;
+    }
+
+    /**
+     * @param Report $report
+     */
+    public function setReport($report)
+    {
+        $this->report = $report;
+    }
+
+    /**
      * @return bool
      */
     public function isAdmin()

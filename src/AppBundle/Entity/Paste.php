@@ -110,6 +110,29 @@ class Paste
     protected $visit;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Report", mappedBy="paste")
+     *
+     * @var Report
+     */
+    protected $report;
+
+    /**
+     * @return Report
+     */
+    public function getReport()
+    {
+        return $this->report;
+    }
+
+    /**
+     * @param Report $report
+     */
+    public function setReport($report)
+    {
+        $this->report = $report;
+    }
+
+    /**
      * @return Visit
      */
     public function getVisit()
