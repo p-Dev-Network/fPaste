@@ -66,11 +66,6 @@ class DefaultController extends Controller
                 }
             }while($uniqueURL == false);
 
-            $message = $paste->getContent();
-            $message = str_replace("\n", "<br>", $message);
-
-            $paste->setContent($message);
-
             $em->persist($paste);
             $em->flush();
 
