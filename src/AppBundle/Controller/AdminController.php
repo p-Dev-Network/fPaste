@@ -70,4 +70,57 @@ class AdminController extends Controller
         }
     }
 
+    /**
+     * @Route("/users/{id}/suspend", name="adminSuspendUser")
+     */
+    public function adminSuspendUserAction($id)
+    {
+        $user = $this->getUser();
+
+        if($user){
+            if($user->isAdmin()){
+                $u = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
+
+                if($u){
+                    $u->setIsSuspended(true);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($u);
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute('adminUserProfile', ['id' => $id]);
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
+     * @Route("/users/{id}/approve", name="adminApproveUser")
+     */
+    public function adminApproveUser($id)
+    {
+        $user = $this->getUser();
+
+        if($user){
+            if($user->isAdmin()){
+                $u = $this->getDoctrine()->getRepository('AppBundle:User')->find($id);
+
+                if($u){
+                    $u->setIsSuspended(false);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($u);
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute('adminUserProfile', ['id' => $id]);
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
 }

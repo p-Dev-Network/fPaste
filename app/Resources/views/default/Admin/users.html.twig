@@ -43,7 +43,11 @@
                                                 <td>{{ u.email }}</td>
                                                 <td>{{ u.paste | length }}</td>
                                                 <td>
-                                                    <i class="fa fa-user-times remove"></i>
+                                                    {% if u.suspended %}
+                                                        <a href="{{ path('adminApproveUser', {'id': u.id}) }}"><i class="fa fa-user-plus"></i></a>
+                                                    {% else %}
+                                                        <a href="{{ path('adminSuspendUser', {'id': u.id}) }}"><i class="fa fa-user-times remove"></i></a>
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                         {% endfor %}
