@@ -125,6 +125,10 @@ footer{
     border: 1px solid var(--main-bg-color);
 }
 
+.remove{
+    color: red!important;
+}
+
 @media only screen and (max-width: 980px) {
     .left-sepparator{
         border-left: 0;

@@ -13,6 +13,7 @@
                 <th>Privacy</th>
                 <th>Author</th>
                 <th>Visits</th>
+                <th>Options</th>
             </tr>
             </thead>
             <tbody class="text-center">
@@ -29,6 +30,7 @@
                         {% endif %}
                     </td>
                     <td>{{ paste.visit | length }}</td>
+                    <td><a href="{{ path('deletePaste', {'url': paste.url}) }}" title="Remove Paste"><i class="fa fa-remove remove"></i></a></td>
                 </tr>
             {% endfor %}
             </tbody>
