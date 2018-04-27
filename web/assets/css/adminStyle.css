@@ -1,0 +1,23 @@
+:root {
+    --main-bg-color: black;
+    --main-font-color: #01DF01;
+}
+
+#adminUsersTab{
+    border-bottom: 1px solid transparent;
+}
+
+#adminUsersTab li .active{
+    background-color: var(--main-font-color)!important;
+    color: var(--main-bg-color)!important;
+    border: 1px solid black;
+}
+
+#adminUsersTab li .active:hover{
+    color: var(--main-bg-color)!important;
+}
+
+#adminUsersTab li a:hover{
+    border: 1px solid var(--main-font-color)!important;
+    color: var(--main-font-color)!important;
+}
