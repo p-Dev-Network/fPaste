@@ -173,40 +173,6 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/delete/{url}", name="deletePaste")
-     * @param $url
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     */
-    public function deletePasteAction($url)
-    {
-        $user = $this->getUser();
-
-        if($user){
-            $paste = $this->getDoctrine()->getRepository('AppBundle:Paste')->findOneBy([
-                'url' => $url
-            ]);
-
-            if($paste){
-                if($paste->getUser() == $user){
-                    $paste->setDeleteDate(new \DateTime("now"));
-                    $paste->setIsActive(false);
-                    $paste->setIsDeletedByUser(true);
-
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($paste);
-                    $em->flush();
-                }
-
-                return $this->redirectToRoute('viewPaste', ['url' => $url]);
-            }else{
-                return $this->redirectToRoute('myPastes');
-            }
-        }else{
-            return $this->redirectToRoute('login');
-        }
-    }
-
-    /**
      * @Route("/logout", name="logout")
      */
     public function logoutAction()
@@ -387,6 +353,40 @@ class DefaultController extends Controller
                     'user' => $user
                 ]);
             }
+        }
+    }
+
+    /**
+     * @Route("/{url}/delete", name="deletePaste")
+     * @param $url
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deletePasteAction($url)
+    {
+        $user = $this->getUser();
+
+        if($user){
+            $paste = $this->getDoctrine()->getRepository('AppBundle:Paste')->findOneBy([
+                'url' => $url
+            ]);
+
+            if($paste){
+                if($paste->getUser() == $user){
+                    $paste->setDeleteDate(new \DateTime("now"));
+                    $paste->setIsActive(false);
+                    $paste->setIsDeletedByUser(true);
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($paste);
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute('viewPaste', ['url' => $url]);
+            }else{
+                return $this->redirectToRoute('myPastes');
+            }
+        }else{
+            return $this->redirectToRoute('login');
         }
     }
 }
