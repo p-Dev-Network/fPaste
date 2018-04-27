@@ -86,6 +86,29 @@ class User implements UserInterface
     protected $support;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false)
+     *
+     * @var boolean
+     */
+    protected $isAdmin = false;
+
+    /**
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->isAdmin;
+    }
+
+    /**
+     * @param bool $isAdmin
+     */
+    public function setIsAdmin($isAdmin)
+    {
+        $this->isAdmin = $isAdmin;
+    }
+
+    /**
      * @return Support
      */
     public function getSupport()

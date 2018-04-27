@@ -79,6 +79,92 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/admin", name="adminIndex")
+     */
+    public function adminAction()
+    {
+        $user = $this->getUser();
+
+        if($user){
+            if($user->isAdmin()){
+                $pastes = $this->getDoctrine()->getRepository('AppBundle:Paste')->findAll();
+
+                $activePastes = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
+                    'isDeletedByUser' => false,
+                    'isDeletedByAdmin' => false,
+                    'isActive' => true
+                ]);
+
+                $deletedPastes = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
+                    'isDeletedByUser' => true
+                ]);
+
+                $suspendedPastes = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
+                    'isDeletedByAdmin' => true
+                ]);
+
+                $publicPastes = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
+                    'privacy' => 'public',
+                    'isDeletedByAdmin' => false,
+                    'isDeletedByUser' => false,
+                    'isActive' => true
+                ]);
+
+                $privatePastes = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
+                    'privacy' => 'private',
+                    'isDeletedByAdmin' => false,
+                    'isDeletedByUser' => false,
+                    'isActive' => true
+                ]);
+
+                $anonymousPastes = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
+                    'isActive' => true,
+                    'isDeletedByUser' => false,
+                    'isDeletedByAdmin' => false,
+                    'user' => null
+                ]);
+
+                $users = $this->getDoctrine()->getRepository('AppBundle:User')->findAll();
+
+                $activeUsers = $this->getDoctrine()->getRepository('AppBundle:User')->findBy([
+                    'isActive' => true,
+                    'isSuspended' => false
+                ]);
+
+                $inactiveUsers = $this->getDoctrine()->getRepository('AppBundle:User')->findBy([
+                    'isActive' => false,
+                    'isSuspended' => false
+                ]);
+
+                $suspendedUsers = $this->getDoctrine()->getRepository('AppBundle:User')->findBy([
+                    'isSuspended' => true
+                ]);
+
+
+
+                return $this->render('default/Admin/index.html.twig', [
+                    'user' => $user,
+                    'pastes' => $pastes,
+                    'activePastes' => $activePastes,
+                    'deletedPastes' => $deletedPastes,
+                    'suspendedPastes' => $suspendedPastes,
+                    'publicPastes' => $publicPastes,
+                    'privatePastes' => $privatePastes,
+                    'anonymousePastes' => $anonymousPastes,
+                    'users' => $users,
+                    'activeUsers' => $activeUsers,
+                    'inactiveUsers' => $inactiveUsers,
+                    'suspendedUsers' => $suspendedUsers
+                ]);
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
      * @Route("/delete", name="__redirectDelete")
      */
     public function redirectDeleteAction()
