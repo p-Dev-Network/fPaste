@@ -39,7 +39,7 @@
             </div>
 
             <div class="card-body">
-                {{ paste.content }}
+                {{ paste.content | striptags('<br>') | raw }}
             </div>
 
             <div class="card-footer">
