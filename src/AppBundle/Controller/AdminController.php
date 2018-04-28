@@ -133,8 +133,6 @@ class AdminController extends Controller
 
         if($user){
             if($user->isAdmin()){
-                $reports = $this->getDoctrine()->getRepository('AppBundle:Report')->findAll();
-
                 $activeReports = $this->getDoctrine()->getRepository('AppBundle:Report')->findBy([
                     'isActive' => true
                 ],[
@@ -155,7 +153,6 @@ class AdminController extends Controller
 
                 return $this->render('default/Admin/reports.html.twig', [
                     'user' => $user,
-                    'reports' => $reports,
                     'activeReports' => $activeReports,
                     'closedReports' => $closedReports,
                     'pendingReports' => $pendingReports
@@ -188,12 +185,48 @@ class AdminController extends Controller
                         'error' => $error
                     ]);
                 }else{
+                    if(!$report->isReaded()){
+                        $report->setIsReaded(true);
+
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($report);
+                        $em->flush();
+                    }
+
                     return $this->render('default/Admin/report.html.twig', [
                         'user' => $user,
                         'error' => $error,
                         'report' => $report
                     ]);
                 }
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
+     * @Route("/reports/{id}/close", name="closeReport")
+     */
+    public function closeReportAction($id)
+    {
+        $user = $this->getUser();
+
+        if($user){
+            if($user->isAdmin()){
+                $report = $this->getDoctrine()->getRepository('AppBundle:Report')->find($id);
+
+                if($report){
+                    $report->setIsActive(false);
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($report);
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute('viewReport', ['id' => $report->getId()]);
             }else{
                 return $this->redirectToRoute('homepage');
             }

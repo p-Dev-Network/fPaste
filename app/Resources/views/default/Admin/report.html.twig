@@ -14,12 +14,19 @@
                         <p><b>User: </b>{% if report.user is null %}Anonymous{% else %}{{ report.user.username }}{% endif %}</p>
                         <p><b>IP: </b>{{ report.iP }}</p>
                         <p><b>Date: </b>{{ report.date | date('d-m-Y H:i:s') }}</p><br/>
-                        <p><b>Reason: </b>{{ report.reason }}</p>
+                        <p><b>Reason: </b>{{ report.reason }}</p><br/><br/><br/>
+                        <p><b>Status: </b>{% if report.active %}Active{% else %}Closed{% endif %}</p>
                     </div>
                 {% else %}
                     <div class="alert alert-danger" role="alert">
                         <h4>This report not exists.</h4>
                     </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-8 m-auto text-center">
+                {% if report.active %}
+                    <a href="{{ path('closeReport', {'id': report.id}) }}" class="btn btn-danger btn-lg">Close Report</a>
                 {% endif %}
             </div>
         </div>

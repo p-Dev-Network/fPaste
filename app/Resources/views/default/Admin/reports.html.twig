@@ -12,11 +12,8 @@
                 <div class="card text-center">
                     <div class="card-header">
                         <ul class="nav nav-tabs" id="adminReportsTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#allReports" role="tab" aria-controls="allReports" aria-selected="true">All Reports</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#pendingReports" role="tab" aria-controls="pendingReports" aria-selected="false">Pendings Reports</a>
+                            <li class="nav-item active">
+                                <a class="nav-link" data-toggle="tab" href="#pendingReports" role="tab" aria-controls="pendingReports" aria-selected="true">Unread</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#activeReports" role="tab" aria-controls="activeReports" aria-selected="false">Active Reports</a>
@@ -29,38 +26,6 @@
                     </div>
                     <div class="card-body">
                         <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="allReports" aria-labelledby="allReports">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Paste</th>
-                                            <th>Date</th>
-                                            <th>User</th>
-                                            <th>Options</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for r in reports %}
-                                            <tr>
-                                                <td>{{ r.id }}</td>
-                                                <td><a href="{{ path('viewReport', {'id': r.id}) }}" target="_blank">{{ r.paste.title }}</a></td>
-                                                <td>{{ r.date | date('d-m-Y H:i:s') }}</td>
-                                                <td>
-                                                    {% if r.user is null %}
-                                                        Anonymous
-                                                    {% else %}
-                                                        {{ r.user.username }}
-                                                    {% endif %}
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
                             <div class="tab-pane fade show active" id="pendingReports" aria-labelledby="pendingReports">
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
@@ -86,7 +51,10 @@
                                                         {{ r.user.username }}
                                                     {% endif %}
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    {% if r.readed %}<i class="fa fa-envelope-open"></i>{% else %}<i class="fa fa-envelope"></i>{% endif %}
+                                                    {% if r.active %}<i class="fa fa-question-circle"></i>{% else %}<i class="fa fa-window-close"></i>{% endif %}
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -118,7 +86,10 @@
                                                         {{ r.user.username }}
                                                     {% endif %}
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    {% if r.readed %}<i class="fa fa-envelope-open"></i>{% else %}<i class="fa fa-envelope"></i>{% endif %}
+                                                    {% if r.active %}<i class="fa fa-question-circle"></i>{% else %}<i class="fa fa-window-close"></i>{% endif %}
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
@@ -150,7 +121,10 @@
                                                         {{ r.user.username }}
                                                     {% endif %}
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    {% if r.readed %}<i class="fa fa-envelope-open"></i>{% else %}<i class="fa fa-envelope"></i>{% endif %}
+                                                    {% if r.active %}<i class="fa fa-question-circle"></i>{% else %}<i class="fa fa-window-close"></i>{% endif %}
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>
