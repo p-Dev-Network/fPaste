@@ -22,7 +22,7 @@ class ReportType extends AbstractType
         $builder
             ->add('reason', TextType::class, [
                 'label' => false,
-                'required' => false,
+                'required' => true,
                 'attr' => [
                     'placeholder' => 'Reason: ',
                     'class' => 'form-control is-valid'
