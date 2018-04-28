@@ -10,7 +10,14 @@
 
             <div class="col-md-10 m-auto">
                 {% if error == 0 %}
-
+                    <div class="col-md-8 m-auto text-left">
+                        <p><b>Username: </b>{{ u.username }}</p>
+                        <p><b>Email: </b>{{ u.email }}</p>
+                        <p><b>Sign Up Date: </b>{{ u.signUpDate | date('d-m-Y H:m:i')}}</p>
+                        <p><b>Pastes: </b>{{ u.paste | length }}</p>
+                        <p><b>Reports: </b>{{ u.report | length }}</p>
+                        <p><b>Status: </b>{% if u.active %}Active{% elseif u.suspended %}Suspended{% else %}Inactive{% endif %}</p>
+                    </div>
                 {% else %}
                     <div class="alert alert-danger" role="alert">
                         <h4>This user not exists.</h4>
