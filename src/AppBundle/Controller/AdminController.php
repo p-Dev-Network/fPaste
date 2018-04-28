@@ -167,4 +167,38 @@ class AdminController extends Controller
             return $this->redirectToRoute('login');
         }
     }
+
+    /**
+     * @Route("/reports/{id}", name="viewReport")
+     */
+    public function viewReportAction($id)
+    {
+        $user = $this->getUser();
+        $error = 0;
+
+        if($user){
+            if($user->isAdmin()){
+                $report = $this->getDoctrine()->getRepository('AppBundle:Report')->find($id);
+
+                if(!$report){
+                    $error = 1;
+
+                    return $this->render('default/Admin/report.html.twig', [
+                        'user' => $user,
+                        'error' => $error
+                    ]);
+                }else{
+                    return $this->render('default/Admin/report.html.twig', [
+                        'user' => $user,
+                        'error' => $error,
+                        'report' => $report
+                    ]);
+                }
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
 }

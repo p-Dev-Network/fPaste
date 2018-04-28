@@ -1,0 +1,27 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Report Detail{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="col-md-10 m-auto text-center">
+            <h1 class="mt30">Report</h1>
+            <hr/>
+
+            <div class="col-md-10 m-auto">
+                {% if error == 0 %}
+                    <div class="col-md-8 m-auto text-left">
+                        <p><b>User: </b>{% if report.user is null %}Anonymous{% else %}{{ report.user.username }}{% endif %}</p>
+                        <p><b>IP: </b>{{ report.iP }}</p>
+                        <p><b>Date: </b>{{ report.date | date('d-m-Y H:i:s') }}</p><br/>
+                        <p><b>Reason: </b>{{ report.reason }}</p>
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        <h4>This report not exists.</h4>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
