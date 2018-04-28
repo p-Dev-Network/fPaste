@@ -21,3 +21,7 @@
     border: 1px solid var(--main-font-color)!important;
     color: var(--main-font-color)!important;
 }
+
+.btn-danger, .btn-success{
+    color: var(--main-bg-color)!important;
+}

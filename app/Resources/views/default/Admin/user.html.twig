@@ -16,7 +16,15 @@
                         <p><b>Sign Up Date: </b>{{ u.signUpDate | date('d-m-Y H:m:i')}}</p>
                         <p><b>Pastes: </b>{{ u.paste | length }}</p>
                         <p><b>Reports: </b>{{ u.report | length }}</p>
-                        <p><b>Status: </b>{% if u.active %}Active{% elseif u.suspended %}Suspended{% else %}Inactive{% endif %}</p>
+                        <p><b>Status: </b>{% if u.suspended %}Suspended{% elseif u.active %}Active{% else %}Inactive{% endif %}</p>
+                    </div>
+
+                    <div class="col-md-8 m-auto text-center">
+                        {% if u.suspended %}
+                            <a href="{{ path('adminApproveUser', {'id': u.id}) }}" class="btn btn-lg btn-success">Approve User</a>
+                        {% else %}
+                            <a href="{{ path('adminSuspendUser', {'id': u.id}) }}" class="btn btn-lg btn-danger">Suspend User</a>
+                        {% endif %}
                     </div>
                 {% else %}
                     <div class="alert alert-danger" role="alert">
