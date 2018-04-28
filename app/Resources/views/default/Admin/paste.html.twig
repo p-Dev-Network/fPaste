@@ -1,0 +1,52 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="col-md-10 m-auto text-center">
+            <h1 class="mt30">Paste Detail</h1>
+            <hr/>
+
+            <div class="col-md-10 m-auto">
+                {% if error == 0 %}
+                    {% if paste.active %}
+                        <div class="col-md-8 m-auto text-center">
+                            <a href="{{ path('adminDeletePaste', {'url': paste.url}) }}" class="btn btn-lg btn-danger">Delete Paste</a>
+                        </div>
+                    {% endif %}
+
+                    <div class="col-md-8 m-auto text-left">
+                        <p><b>Title: </b>{{ paste.title }}</p>
+                        <p><b>Privacy: </b>{{ paste.privacy }}</p>
+                        {% if paste.anonymous %}<p><b>Anonymous</b></p>{% endif %}
+                        <p><b>Date: </b>{{ paste.date | date('d-m-Y H:i:s') }}</p>
+                        <p><b>User: </b>{% if paste.user is null %}Anonymous{% else %}<a href="{{ path('adminUserProfile', {'id': paste.user.id}) }}">{{ paste.user.username }}</a>{% endif %}</p>
+                        <p><b>IP: </b>{{ paste.iP }}</p>
+                        <p><b>Status: </b>
+                            {% if paste.deletedByAdmin %}
+                                Deleted by Admin ( {{ paste.deleteDate | date('d-m-Y H:i:s') }} )
+                            {% elseif paste.deletedByUser %}
+                                Deleted by User ( {{ paste.deleteDate | date('d-m-Y H:i:s') }} )
+                            {% else %}
+                                Active
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="col-md-8 m-auto text-center">
+                        <div class="card">
+                            <div class="card-body">
+                                {{ paste.content }}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        <h4>This paste not exists.</h4>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

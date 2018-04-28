@@ -234,4 +234,118 @@ class AdminController extends Controller
             return $this->redirectToRoute('login');
         }
     }
+
+    /**
+     * @Route("/pastes", name="adminPastes")
+     */
+    public function adminPastesAction()
+    {
+        $user = $this->getUser();
+
+        if($user){
+            if($user->isAdmin()){
+                $public = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
+                    'privacy' => 'public',
+                    'isDeletedByUser' => false,
+                    'isDeletedByAdmin' => false
+                ],[
+                    'date' => 'DESC'
+                ]);
+
+                $private = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
+                    'privacy' => 'private',
+                    'isDeletedByAdmin' => false,
+                    'isDeletedByUser' => false
+                ],[
+                    'date' => 'DESC'
+                ]);
+
+                $deleted = $this->getDoctrine()->getRepository('AppBundle:Paste')->findBy([
+                    'isActive' => false
+                ],[
+                    'date' => 'DESC'
+                ]);
+
+                return $this->render('default/Admin/pastes.html.twig', [
+                    'user' => $user,
+                    'public' => $public,
+                    'private' => $private,
+                    'deleted' => $deleted
+                ]);
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
+     * @Route("/pastes/{url}", name="adminViewPaste")
+     */
+    public function adminViewPasteAction($url)
+    {
+        $user = $this->getUser();
+        $error = 0;
+
+        if($user){
+            if($user->isAdmin()){
+                $paste = $this->getDoctrine()->getRepository('AppBundle:Paste')->findOneBy([
+                    'url' => $url
+                ]);
+
+                if($paste){
+                    return $this->render('default/Admin/paste.html.twig', [
+                        'user' => $user,
+                        'error' => $error,
+                        'paste' => $paste
+                    ]);
+                }else{
+                    $error = 1;
+
+                    return $this->render('default/Admin/paste.html.twig', [
+                        'user' => $user,
+                        'error' => $error
+                    ]);
+                }
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
+     * @Route("/pastes/{url}/delete", name="adminDeletePaste")
+     */
+    public function adminDeletePasteAction($url)
+    {
+        $user = $this->getUser();
+
+        if($user){
+            if($user->isAdmin()){
+                $paste = $this->getDoctrine()->getRepository('AppBundle:Paste')->findOneBy([
+                    'url' => $url
+                ]);
+
+                if($paste){
+                    $paste->setIsActive(false);
+                    $paste->setIsDeletedByAdmin(true);
+                    $paste->setIsDeletedByUser(false);
+                    $paste->setDeleteDate(new \DateTime("now"));
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($paste);
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute('adminViewPaste', ['url' => $url]);
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
 }
