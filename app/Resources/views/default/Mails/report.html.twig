@@ -1,0 +1,8 @@
+<h2>New Report</h2>
+
+<hr/>
+
+<b>User: </b>{% if report.user is null %}Anonymous{% else %}{{ report.user.username }}{% endif %}<br>
+<b>IP: </b>{{ report.iP }}<br/>
+<b>Reason: </b><br/>
+<p>{{ report.reason }}</p>

@@ -395,7 +395,7 @@ class DefaultController extends Controller
     /**
      * @Route("/{url}/report", name="reportPaste")
      */
-    public function reportPasteAction($url, Request $request)
+    public function reportPasteAction($url, Request $request, \Swift_Mailer $mailer)
     {
         $user = $this->getUser();
         $error = 1;
@@ -428,6 +428,27 @@ class DefaultController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($report);
                 $em->flush();
+
+                $check = $this->getDoctrine()->getRepository('AppBundle:Report')->findBy([
+                    'isActive' => true,
+                    'paste' => $paste
+                ]);
+
+                if(count($check) > 3){
+                    $message = (new \Swift_Message('[fPaste.me] New Repport'))
+                        ->setFrom('support@fpaste.me')
+                        ->setTo('pedrojanula@gmail.com')
+                        ->setBody(
+                            $this->renderView(
+                                'default/Mails/report.html.twig', [
+                                    'report' => $report
+                                ]
+                            ),
+                            'text/html'
+                        );
+
+                    $mailer->send($message);
+                }
 
                 $error = 0;
             }
