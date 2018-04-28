@@ -3,10 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Paste;
+use AppBundle\Entity\Report;
 use AppBundle\Entity\Support;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Visit;
 use AppBundle\Form\PasteType;
+use AppBundle\Form\ReportType;
 use AppBundle\Form\SupportType;
 use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -387,6 +389,56 @@ class DefaultController extends Controller
             }
         }else{
             return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
+     * @Route("/{url}/report", name="reportPaste")
+     */
+    public function reportPasteAction($url, Request $request)
+    {
+        $user = $this->getUser();
+        $error = 1;
+
+        $paste = $this->getDoctrine()->getRepository('AppBundle:Paste')->findOneBy([
+            'url' => $url,
+            'isDeletedByAdmin' => false,
+            'isDeletedByUser' => false,
+            'isActive' => true
+        ]);
+
+        if($paste){
+            $report = new Report();
+            $form = $this->createForm(ReportType::class, $report);
+            $form->handleRequest($request);
+
+            if($form->isSubmitted() && $form->isValid()){
+                $report->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
+                $report->setDate(new \DateTime("now"));
+
+                if($user){
+                    $report->setUser($user);
+                }else{
+                    $report->setUser(null);
+                }
+
+                $report->setIsActive(true);
+                $report->setPaste($paste);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($report);
+                $em->flush();
+
+                $error = 0;
+            }
+
+            return $this->render('default/Paste/report.html.twig',[
+                'user' => $user,
+                'form' => $form->createView(),
+                'error' => $error
+            ]);
+        }else{
+            return $this->redirectToRoute('viewPaste', ['url' => $url]);
         }
     }
 }

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Report this paste{% endblock %}
+
+{% block body %}
+    <div class="col-md-8 m-auto">
+        <div class="col-md-12 text-center mt30">
+            <h4>You are going to report this paste. Please specify a reason: </h4>
+        </div>
+
+        {% if error == 0 %}
+            <div class="alert alert-success text-center mt30" role="alert">
+                <h4>Report sent successfully. Thanks.</h4>
+            </div>
+        {% endif %}
+
+        {% if error == 1 %}
+            <div class="col-md-12 text-center mt30">
+                {{ form_start(form) }}
+                {{ form_widget(form.reason) }}
+                <div class="mt30">
+                    {{ form_widget(form.Report) }}
+                </div>
+                {{ form_end(form) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

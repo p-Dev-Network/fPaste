@@ -17,6 +17,7 @@
                         <th>Date</th>
                         <th>Author</th>
                         <th>Visits</th>
+                        <td>Options</td>
                     </tr>
                     </thead>
                     <tbody class="text-center">
@@ -32,6 +33,7 @@
                                 {% endif %}
                             </td>
                             <td>{{ paste.visit | length }}</td>
+                            <td><a href="{{ path('reportPaste', {'url': paste.url}) }}"><i class="fa fa-flag remove"></i></a></td>
                         </tr>
                     {% endfor %}
                     </tbody>
