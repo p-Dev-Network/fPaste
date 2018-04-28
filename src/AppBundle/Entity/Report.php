@@ -61,6 +61,29 @@ class Report
     protected $isActive;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false)
+     *
+     * @var boolean
+     */
+    protected $isReaded = false;
+
+    /**
+     * @return bool
+     */
+    public function isReaded()
+    {
+        return $this->isReaded;
+    }
+
+    /**
+     * @param bool $isReaded
+     */
+    public function setIsReaded($isReaded)
+    {
+        $this->isReaded = $isReaded;
+    }
+
+    /**
      * @return int
      */
     public function getId()

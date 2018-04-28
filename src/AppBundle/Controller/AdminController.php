@@ -123,4 +123,48 @@ class AdminController extends Controller
             return $this->redirectToRoute('login');
         }
     }
+
+    /**
+     * @Route("/reports", name="adminReports")
+     */
+    public function adminReportsAction()
+    {
+        $user = $this->getUser();
+
+        if($user){
+            if($user->isAdmin()){
+                $reports = $this->getDoctrine()->getRepository('AppBundle:Report')->findAll();
+
+                $activeReports = $this->getDoctrine()->getRepository('AppBundle:Report')->findBy([
+                    'isActive' => true
+                ],[
+                    'date' => 'DESC'
+                ]);
+
+                $closedReports = $this->getDoctrine()->getRepository('AppBundle:Report')->findBy([
+                    'isActive' => false
+                ],[
+                    'date' => 'DESC'
+                ]);
+
+                $pendingReports = $this->getDoctrine()->getRepository('AppBundle:Report')->findBy([
+                    'isReaded' => false
+                ],[
+                    'date' => 'DESC'
+                ]);
+
+                return $this->render('default/Admin/reports.html.twig', [
+                    'user' => $user,
+                    'reports' => $reports,
+                    'activeReports' => $activeReports,
+                    'closedReports' => $closedReports,
+                    'pendingReports' => $pendingReports
+                ]);
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
 }
