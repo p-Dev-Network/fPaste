@@ -267,6 +267,21 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/top50", name="top50")
+     */
+    public function top50Action()
+    {
+        $user = $this->getUser();
+
+        $pastes = $this->getDoctrine()->getManager()->createQuery("SELECT p.title as title, p.url as url, p.date as date, count(v) as counter FROM AppBundle:Visit v JOIN AppBundle:Paste p WITH v.paste = p.id WHERE p.privacy = 'public' AND p.isDeletedByUser = FALSE AND p.isDeletedByAdmin = FALSE AND p.isActive = TRUE GROUP BY v.paste ORDER BY counter DESC")->getResult();
+
+        return $this->render('default/Paste/top50.html.twig', [
+            'user' => $user,
+            'pastes' => $pastes
+        ]);
+    }
+
+    /**
      * @Route("/signup", name="signUp")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response

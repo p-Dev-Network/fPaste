@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Top 50 Pastes{% endblock %}
+
+{% block metaTags %}
+    <meta name="description" content="Top 50 pastes more popular.">
+{% endblock %}
+
+{% block body %}
+    <div class="col-md-10 m-auto">
+        {% if pastes | length == 0 %}
+            <div class="alert alert-warning text-center" role="alert">
+                <p>Not pastes found. <a href="{{ path('homepage') }}">Create the first.</a></p>
+            </div>
+        {% else %}
+            <div class="text-center">
+                <h4>These are the most popular pastes in fPaste.me</h4>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered mt30">
+                    <thead class="thead-dark text-center">
+                    <tr>
+                        <th>Paste</th>
+                        <th>Date</th>
+                        <th>Visits</th>
+                        <td>Options</td>
+                    </tr>
+                    </thead>
+                    <tbody class="text-center">
+                    {% for paste in pastes %}
+                        <tr>
+                            <td><a href="{{ path('viewPaste', {'url': paste.url}) }}">{{ paste.title }}</a></td>
+                            <td>{{ paste.date | date('d-m-Y H:i:s') }}</td>
+                            <td>{{ paste.counter }}</td>
+                            <td>
+                                <a href="{{ path('reportPaste', {'url': paste.url}) }}"><i class="fa fa-flag remove" title="Report"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
