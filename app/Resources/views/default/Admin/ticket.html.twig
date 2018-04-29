@@ -1,0 +1,43 @@
+{% extends 'baseAdmin.html.twig' %}
+
+{% block title %}Report Detail{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="col-md-10 m-auto text-center">
+            <h1 class="mt30">Ticket</h1>
+            <hr/>
+
+            <div class="col-md-10 m-auto">
+                {% if error == 0 %}
+                    <div class="col-md-8 m-auto text-left">
+                        <p><b>Email: </b>{{ ticket.email }}</p>
+                        <p><b>Username: </b>{% if ticket.user is null %}Anonymous{% else %}<a href="{{ path('adminUserProfile', {'id': ticket.user.id}) }}">{{ ticket.user.username }}</a>{% endif %}</p>
+                        <p><b>Date: </b>{{ ticket.date | date('d-m-Y H:i:s') }}</p>
+                        <p><b>IP: </b>{{ ticket.iP }}</p>
+                        <p><b>Category: </b>{{ ticket.category }}</p>
+                        <p><b>Status: </b>{% if ticket.closed %}<span class="remove">Closed</span>{% else %}Open{% endif %}</p>
+
+                        <br/>
+
+                        <div class="card">
+                            <div class="card-body">
+                                {{ ticket.message }}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        <h4>This ticket not exists.</h4>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-8 m-auto text-center">
+                {% if ticket.closed == false %}
+                    <a href="{{ path('closeTicket', {'id': ticket.id}) }}" class="btn btn-danger btn-lg mt30">Close Ticket</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

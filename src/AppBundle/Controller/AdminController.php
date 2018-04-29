@@ -348,4 +348,125 @@ class AdminController extends Controller
             return $this->redirectToRoute('login');
         }
     }
+
+    /**
+     * @Route("/support", name="supportIndex")
+     */
+    public function supportIndexAction()
+    {
+        $user = $this->getUser();
+
+        if($user){
+            if($user->isAdmin()){
+                $abuse = $this->getDoctrine()->getRepository('AppBundle:Support')->findBy([
+                    'isClosed' => false,
+                    'category' => 'abuse'
+                ],[
+                    'date' => 'DESC'
+                ]);
+
+                $tech = $this->getDoctrine()->getRepository('AppBundle:Support')->findBy([
+                    'isClosed' => false,
+                    'category' => 'technicalProblems'
+                ], [
+                    'date' => 'DESC'
+                ]);
+
+                $other = $this->getDoctrine()->getRepository('AppBundle:Support')->findBy([
+                    'isClosed' => false,
+                    'category' => 'other'
+                ], [
+                    'date' => 'DESC'
+                ]);
+
+                $closed = $this->getDoctrine()->getRepository('AppBundle:Support')->findBy([
+                    'isClosed' => true
+                ], [
+                    'date' => 'DESC'
+                ]);
+
+                return $this->render('default/Admin/support.html.twig', [
+                    'user' => $user,
+                    'abuse' => $abuse,
+                    'tech' => $tech,
+                    'other' => $other,
+                    'closed' => $closed
+                ]);
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
+     * @Route("/support/{id}", name="adminViewTicket")
+     */
+    public function adminViewReportTicket($id)
+    {
+        $user = $this->getUser();
+        $error = 0;
+
+        if($user){
+            if($user->isAdmin()){
+                $ticket = $this->getDoctrine()->getRepository('AppBundle:Support')->find($id);
+
+                if($ticket){
+                    if(!$ticket->isReaded()){
+                        $ticket->setIsReaded(true);
+
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($ticket);
+                        $em->flush();
+                    }
+
+                    return $this->render('default/Admin/ticket.html.twig', [
+                        'user' => $user,
+                        'error' => $error,
+                        'ticket' => $ticket
+                    ]);
+                }else{
+                    $error = 1;
+
+                    return $this->render('default/Admin/ticket.html.twig', [
+                        'user' => $user,
+                        'error' => $error
+                    ]);
+                }
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
+     * @Route("/support/{id}/close", name="closeTicket")
+     */
+    public function closeTicketAction($id)
+    {
+        $user = $this->getUser();
+
+        if($user){
+            if($user->isAdmin()){
+                $ticket = $this->getDoctrine()->getRepository('AppBundle:Support')->find($id);
+
+                if($ticket){
+                    $ticket->setIsClosed(true);
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($ticket);
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute('adminViewTicket', ['id' => $id]);
+            }else{
+                return $this->redirectToRoute('homepage');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
 }
