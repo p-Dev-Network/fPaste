@@ -291,17 +291,17 @@ class DefaultController extends Controller
         $user = $this->getUser();
 
         if(!$user){
-            $user = new User();
-            $form = $this->createForm(UserType::class, $user);
+            $newUser = new User();
+            $form = $this->createForm(UserType::class, $newUser);
             $form->handleRequest($request);
 
             if($form->isSubmitted() && $form->isValid()){
-                $user->setSignUpDate(new \DateTime("now"));
+                $newUser->setSignUpDate(new \DateTime("now"));
                 $password = $this->get('security.password_encoder');
-                $user->setPassword($password->encodePassword($user, $form->get('password')->get('first')->getData()));
+                $newUser->setPassword($password->encodePassword($newUser, $form->get('password')->get('first')->getData()));
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
+                $em->persist($newUser);
                 $em->flush();
 
                 return $this->redirectToRoute('login');
