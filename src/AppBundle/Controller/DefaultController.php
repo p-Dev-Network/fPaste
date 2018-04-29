@@ -197,7 +197,7 @@ class DefaultController extends Controller
     /**
      * @Route("/support", name="support")
      */
-    public function supportAction(Request $request){
+    public function supportAction(Request $request, \Swift_Mailer $mailer){
         $user = $this->getUser();
         $error = 1;
 
@@ -219,6 +219,20 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($support);
             $em->flush();
+
+            $message = (new \Swift_Message('[fPaste.me] New Support Ticket'))
+                ->setFrom('support@fpaste.me')
+                ->setTo('support@fpaste.me')
+                ->setBody(
+                    $this->renderView(
+                        'default/Mails/ticket.html.twig', [
+                            'ticket' => $support
+                        ]
+                    ),
+                    'text/html'
+                );
+
+            $mailer->send($message);
 
             $error = 0;
         }
@@ -437,7 +451,7 @@ class DefaultController extends Controller
                 if(count($check) > 3){
                     $message = (new \Swift_Message('[fPaste.me] New Repport'))
                         ->setFrom('support@fpaste.me')
-                        ->setTo('pedrojanula@gmail.com')
+                        ->setTo('support@fpaste.me')
                         ->setBody(
                             $this->renderView(
                                 'default/Mails/report.html.twig', [

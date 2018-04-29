@@ -1,0 +1,14 @@
+<h2>New Support Ticket</h2>
+
+<hr/>
+
+<p><b>Email: </b>{{ ticket.email }}</p>
+<p><b>Username: </b>{% if ticket.user is null %}Anonymous{% else %}{{ ticket.user.username }}{% endif %}</p>
+<p><b>Date: </b>{{ ticket.date | date('d-m-Y H:i:s') }}</p>
+<p><b>IP: </b>{{ ticket.iP }}</p>
+<p><b>Category: </b>{{ ticket.category }}</p>
+
+<br/>
+
+<b>Message: </b><br/>
+<p>{{ ticket.message }}</p>
