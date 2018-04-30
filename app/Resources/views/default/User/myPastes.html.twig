@@ -31,7 +31,14 @@
                             {% endif %}
                         </td>
                         <td>{{ paste.visit | length }}</td>
-                        <td><a href="{{ path('deletePaste', {'url': paste.url}) }}" title="Remove Paste"><i class="fa fa-remove remove"></i></a></td>
+                        <td>
+                            {% if paste.privacy == 'public' %}
+                                <a href="{{ path('changePrivacyPaste', {'url': paste.url}) }}" title="Make private"><i class="fa fa-lock"></i></a>
+                            {% elseif paste.privacy == 'private' %}
+                                <a href="{{ path('changePrivacyPaste', {'url': paste.url}) }}" title="Make public"><i class="fa fa-unlock"></i></a>
+                            {% endif %}
+                            <a href="{{ path('deletePaste', {'url': paste.url}) }}" title="Remove Paste"><i class="fa fa-remove remove"></i></a>
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>

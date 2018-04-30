@@ -50,6 +50,15 @@
 
             <div class="card-footer">
                 <div class="col-md-12 text-right">
+                    {% if paste.user is not null %}
+                         {% if paste.user.id == user.id %}
+                             {% if paste.privacy == 'public' %}
+                                 <a href="{{ path('changePrivacyPaste', {'url': paste.url}) }}" title="Make private"><i class="fa fa-lock"></i></a>
+                             {% elseif paste.privacy == 'private' %}
+                                 <a href="{{ path('changePrivacyPaste', {'url': paste.url}) }}" title="Make public"><i class="fa fa-unlock"></i></a>
+                             {% endif %}
+                         {% endif %}
+                    {% endif %}
                     <a href="{{ path('reportPaste', {'url': paste.url}) }}"><i class="fa fa-flag remove"></i></a>
                 </div>
             </div>

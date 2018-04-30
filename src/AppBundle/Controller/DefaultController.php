@@ -442,6 +442,42 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/{url}/changePrivacy", name="changePrivacyPaste")
+     */
+    public function changePrivacyPasteAction($url, Request $request)
+    {
+        $user = $this->getUser();
+
+        if($user){
+            $paste = $this->getDoctrine()->getRepository('AppBundle:Paste')->findOneBy([
+                'url' => $url
+            ]);
+
+            if($paste){
+                if($paste->getUser() == $user){
+                    if($paste->getPrivacy() == 'public'){
+                        $paste->setPrivacy('private');
+                    }else{
+                        $paste->setPrivacy('public');
+                    }
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($paste);
+                    $em->flush();
+
+                    return $this->redirect($request->headers->get('referer'));
+                }
+
+                return $this->redirectToRoute('viewPaste', [
+                    'url' => $url
+                ]);
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
      * @Route("/{url}/delete", name="deletePaste")
      * @param $url
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
