@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Search{% endblock %}
+
+{% block body %}
+    <div class="col-md-8 m-auto text-center mt30">
+        <h4>Searching Pastes by: {{ searchBy }}</h4>
+    </div>
+
+    <div class="col-md-8 m-auto">
+        {% if search | length == 0 %}
+            <div class="alert alert-danger mt30" role="alert">
+                <h4>No pastes found.</h4>
+            </div>
+        {% else %}
+            <div class="table-responsive mt30 text-center">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Paste</th>
+                            <th>Date</th>
+                            <th>Author</th>
+                            <th>Options</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in search %}
+                            <tr>
+                                <td><a href="{{ path('viewPaste', {'url': s.url}) }}">{{ s.title }}</a></td>
+                                <td>{{ s.date | date('d-m-Y H:i:s') }}</td>
+                                <td>{% if s.isAnonymous %}Anonymous{% else %}{{ s.user.username }}{% endif %}</td>
+                                <td><a href="{{ path('reportPaste', {'url': s.url}) }}"><i class="fa fa-flag remove"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Paste;
 use AppBundle\Entity\Report;
+use AppBundle\Entity\Search;
 use AppBundle\Entity\Support;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Visit;
@@ -310,6 +311,59 @@ class DefaultController extends Controller
             return $this->render('default/signUp.html.twig', [
                 'form' => $form->createView(),
                 'user' => $user
+            ]);
+        }else{
+            return $this->redirectToRoute('homepage');
+        }
+    }
+
+    /**
+     * @Route("/search", name="searchPastes")
+     */
+    public function searchPastesAction(Request $request)
+    {
+        $user = $this->getUser();
+
+        if(isset($_POST['inputSearch'])){
+            $input = $_POST['inputSearch'];
+
+            if(strlen($input) == 0){
+                return $this->redirect($request->headers->get('referer'));
+            }elseif(strlen($input) == 1 && $input[0] == ' '){
+                return $this->redirect($request->headers->get('referer'));
+            }
+
+            $em = $this->getDoctrine()->getManager();
+
+            $search = new Search();
+
+            if($user){
+                $search->setUser($user);
+            }else{
+                $search->setUser(null);
+            }
+
+            $search->setDate(new \DateTime("now"));
+            $search->setValue($input);
+            $search->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
+
+            $em->persist($search);
+            $em->flush();
+
+            $result = $em->getRepository("AppBundle:Paste")->createQueryBuilder('p')
+                ->where('p.content LIKE :content')
+                ->andWhere("p.privacy = 'public'")
+                ->andWhere('p.isDeletedByUser = FALSE')
+                ->andWhere('p.isDeletedByAdmin = FALSE')
+                ->andWhere('p.isActive = TRUE')
+                ->setParameter('content', '%'.$input.'%')
+                ->getQuery()
+                ->getResult();
+
+            return $this->render('default/search.html.twig', [
+                'user' => $user,
+                'search' => $result,
+                'searchBy' => $input
             ]);
         }else{
             return $this->redirectToRoute('homepage');

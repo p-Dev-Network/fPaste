@@ -100,6 +100,29 @@ class User implements UserInterface
     protected $report;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Search", mappedBy="user")
+     *
+     * @var Search
+     */
+    protected $search;
+
+    /**
+     * @return Search
+     */
+    public function getSearch()
+    {
+        return $this->search;
+    }
+
+    /**
+     * @param Search $search
+     */
+    public function setSearch($search)
+    {
+        $this->search = $search;
+    }
+
+    /**
      * @return Report
      */
     public function getReport()

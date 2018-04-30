@@ -28,10 +28,20 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-
+                        <form action="{{ path('searchPastes') }}" method="post">
+                            <div class="col-auto search">
+                                <label class="sr-only" for="inlineFormInputGroup">Search</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control is-valid" id="inlineFormInputGroup" placeholder="Search..." name="inputSearch">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text search-button"><button type="submit" class="btn is-active"><i class="fa fa-search is-active"></i></button></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </ul>
 
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto links-header">
                         {% if user and user.isAdmin %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('adminIndex') }}">Admin</a>
