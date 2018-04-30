@@ -6,7 +6,9 @@
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        {% block metaTags %}{% endblock %}
+        {% block metaTags %}
+        <meta name="robots" content="index, follow">
+        {% endblock %}
         <meta name="keywords" content="paste, security, anonymous, open source, free, share, social">
         <meta name="robots" content="index, noimageindex, follow, nocache">
         <meta name="web_author" content="p-Dev Network">
