@@ -130,7 +130,7 @@ footer{
 }
 
 .search{
-    margin-left: 30px;
+    margin-left: 20px;
 }
 
 .search-button{
@@ -142,6 +142,11 @@ footer{
 .search-button button{
     background-color: var(--main-bg-color);
     border: 0;
+}
+
+.logo{
+    width: 200px;
+    margin-right: 0;
 }
 
 @media only screen and (max-width: 980px) {

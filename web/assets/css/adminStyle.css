@@ -25,3 +25,8 @@
 .btn-danger, .btn-success{
     color: var(--main-bg-color)!important;
 }
+
+.logo{
+    width: 200px;
+    margin-right: 0;
+}
