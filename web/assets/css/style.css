@@ -149,6 +149,10 @@ footer{
     margin-right: 0;
 }
 
+.privacy-policy ul li{
+    color: gray!important;
+}
+
 @media only screen and (max-width: 980px) {
     .search{
         margin-top: 20px;

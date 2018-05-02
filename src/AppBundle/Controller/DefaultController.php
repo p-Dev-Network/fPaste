@@ -311,6 +311,19 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/privacy", name="privacy")
+     */
+    public function privacyAction()
+    {
+        $user = $this->getUser();
+
+        return $this->render('default/Info/privacy.html.twig', [
+            'user' => $user
+        ]);
+
+    }
+
+    /**
      * @Route("/faq", name="faq")
      */
     public function faqAction()
