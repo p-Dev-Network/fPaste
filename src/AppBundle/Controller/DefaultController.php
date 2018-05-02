@@ -3,11 +3,13 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Paste;
+use AppBundle\Entity\Recover;
 use AppBundle\Entity\Report;
 use AppBundle\Entity\Search;
 use AppBundle\Entity\Support;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Visit;
+use AppBundle\Form\ChangePasswordType;
 use AppBundle\Form\PasteType;
 use AppBundle\Form\ReportType;
 use AppBundle\Form\SupportType;
@@ -143,8 +145,6 @@ class DefaultController extends Controller
                     'isSuspended' => true
                 ]);
 
-
-
                 return $this->render('default/Admin/index.html.twig', [
                     'user' => $user,
                     'pastes' => $pastes,
@@ -168,19 +168,146 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/delete", name="__redirectDelete")
-     */
-    public function redirectDeleteAction()
-    {
-        return $this->redirectToRoute('homepage');
-    }
-
-    /**
      * @Route("/logout", name="logout")
      */
     public function logoutAction()
     {
         return $this->redirectToRoute('login');
+    }
+
+    /**
+     * @Route("/recover", name="recoverPassword")
+     */
+    public function recoverPasswordAction(\Swift_Mailer $mailer)
+    {
+        $user = $this->getUser();
+
+        if(!$user){
+            if(isset($_POST['email']) && strlen($_POST['email']) > 3){
+                $email = $_POST['email'];
+                $error = 1;
+
+                $account = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy([
+                    'email' => $email
+                ]);
+
+                if($account){
+                    $recover = new Recover();
+                    $recover->setDate(new \DateTime("now"));
+                    $recover->setEmail($email);
+                    $recover->setExpiredDate(new \DateTime("now + 24 hours"));
+                    $recover->setIsUsed(false);
+                    $code = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+                    $recover->setCode($code);
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($recover);
+                    $em->flush();
+
+                    $message = (new \Swift_Message('[fPaste.me] Change Password'))
+                        ->setFrom('support@fpaste.me')
+                        ->setTo($email)
+                        ->setBody(
+                            $this->renderView(
+                                'default/Mails/recoverPassword.html.twig', [
+                                    'email' => $email,
+                                    'code' => $code
+                                ]
+                            ),
+                            'text/html'
+                        );
+
+                    $mailer->send($message);
+                }
+            }else{
+                $error = 0;
+            }
+
+            return $this->render('default/recover.html.twig', [
+                'user' => $user,
+                'error' => $error
+            ]);
+        }else{
+            return $this->redirectToRoute('myAccount');
+        }
+    }
+
+    /**
+     * @Route("/changePassword", name="changePassword")
+     */
+    public function changePasswordAction(Request $request)
+    {
+        $user = $this->getUser();
+
+        if(!$user){
+            $email = $_GET['email'];
+            $code = $_GET['code'];
+            $error = 0;
+
+            $check = $this->getDoctrine()->getRepository('AppBundle:Recover')->findOneBy([
+                'email' => $email,
+                'code' => $code
+            ]);
+
+            if($check){
+                if($check->isUsed()){
+                    $error = 2;
+                }else{
+                    $actualDate = new \DateTime("now");
+
+                    if($actualDate < $check->getExpiredDate()){
+                        $userPassword = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy([
+                            'email' => $email
+                        ]);
+
+                        if($userPassword){
+                            $form = $this->createForm(ChangePasswordType::class, $userPassword);
+                            $form->handleRequest($request);
+
+                            if($form->isSubmitted() && $form->isValid()){
+                                $password = $this->get('security.password_encoder');
+                                $userPassword->setPassword($password->encodePassword($userPassword, $form->get('password')->get('first')->getData()));
+
+                                $em = $this->getDoctrine()->getManager();
+                                $em->persist($userPassword);
+                                $em->flush();
+
+                                $check->setIsUsed(true);
+                                $check->setChangeDate(new \DateTime("now"));
+                                $check->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
+                                $check->setUser($userPassword);
+
+                                $em->persist($check);
+                                $em->flush();
+
+                                $error = 5;
+                            }else{
+                                $error = 6;
+                            }
+
+                            return $this->render('default/changePassword.html.twig', [
+                                'user' => $user,
+                                'form' => $form->createView(),
+                                'error' => $error
+                            ]);
+                        }else{
+                            $error = 4;
+                        }
+                    }else{
+                        $error = 3;
+                    }
+                }
+            }else{
+                $error = 1;
+            }
+
+            return $this->render('default/changePassword.html.twig', [
+                'user' => $user,
+                'error' => $error
+            ]);
+        }else{
+            return $this->redirectToRoute('myAccount');
+        }
     }
 
     /**

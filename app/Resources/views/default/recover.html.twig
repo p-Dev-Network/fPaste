@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Remember Password{% endblock %}
+
+{% block body %}
+    <div class="col-md-4 m-auto">
+        <div class="card mt30">
+            <div class="card-header text-center">
+                <h2>Remember Password</h2>
+            </div>
+            <div class="card-body">
+                <form action="{{ path('recoverPassword') }}" method="post">
+                    {% if error == 1 %}
+                        <div class="alert alert-success" role="alert">
+                            If the email exists, you will receive a link to change the password at this email address.
+                        </div>
+                    {% endif %}
+                    <input type="email" name="email" required placeholder="Email: " class="form-control is-valid mb20" />
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-lg btn-send is-valid">Remember</button>
+                    </div>
+                </form>
+
+                <div class="row mt30">
+                    <div class="col-md-6 m-auto text-center">
+                        <a href="{{ path('login') }}"><i class="fa fa-arrow-right"></i> Login</a>
+                    </div>
+
+                    <div class="col-md-6 m-auto text-center">
+                        <a href="{{ path('signUp') }}"><i class="fa fa-arrow-right"></i> Create account</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

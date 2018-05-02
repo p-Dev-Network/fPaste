@@ -107,6 +107,29 @@ class User implements UserInterface
     protected $search;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Recover", mappedBy="user")
+     *
+     * @var Recover
+     */
+    protected $recover;
+
+    /**
+     * @return Recover
+     */
+    public function getRecover()
+    {
+        return $this->recover;
+    }
+
+    /**
+     * @param Recover $recover
+     */
+    public function setRecover($recover)
+    {
+        $this->recover = $recover;
+    }
+
+    /**
      * @return Search
      */
     public function getSearch()
