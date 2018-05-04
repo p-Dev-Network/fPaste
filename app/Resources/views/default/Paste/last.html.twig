@@ -30,10 +30,14 @@
                             <td><a href="{{ path('viewPaste', {'url': paste.url}) }}" target="_blank">{{ paste.title }}</a></td>
                             <td>{{ paste.date | date('d-m-Y H:i:s') }}</td>
                             <td>
-                                {% if paste.isAnonymous %}
-                                    Anonymous
+                                {% if paste.sendAsAdmin %}
+                                    <b class="remove">Administrator</b>
                                 {% else %}
-                                    {{ paste.user.username }}
+                                    {% if paste.isAnonymous %}
+                                        Anonymous
+                                    {% else %}
+                                        {{ paste.user.username }}
+                                    {% endif %}
                                 {% endif %}
                             </td>
                             <td>{{ paste.visit | length }}</td>
