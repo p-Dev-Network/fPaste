@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirm Delete{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="col-md-8 m-auto text-center">
+            <p class="mt30">This paste will be removed. Are you sure?</p>
+        </div>
+
+        <div class="col-md-8 m-auto text-center">
+            <a href="{{ path('deletePaste', {'url': paste.url}) }}" title="Delete Paste" class="btn btn-danger">Delete</a>
+            <a href="{{ path('viewPaste', {'url': paste.url}) }}" title="Cancel" class="btn btn-send">Cancel</a>
+        </div>
+    </div>
+{% endblock %}

@@ -14,7 +14,7 @@
     {% endif %}
 {% endblock %}
 
-{% if paste.privacy == 'private' %}
+{% if error == 0 and paste.privacy == 'private' %}
     {% block metaTags %}
         <meta name="robots" content="noindex, nofollow">
     {% endblock %}
@@ -59,6 +59,7 @@
                              {% endif %}
 
                              <a href="{{ path('editPaste', {'url': paste.url}) }}" title="Edit Paste"><i class="fa fa-edit"></i></a>
+                             <a href="{{ path('confirmDelete', {'url': paste.url}) }}" title="Delete Paste"><i class="fa fa-remove remove"></i></a>
                          {% endif %}
                     {% endif %}
                     <a href="{{ path('reportPaste', {'url': paste.url}) }}"><i class="fa fa-flag remove"></i></a>

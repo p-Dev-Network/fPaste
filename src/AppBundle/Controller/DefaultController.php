@@ -656,6 +656,35 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/{url}/confirmDelete", name="confirmDelete")
+     */
+    public function confirmDeleteAction($url)
+    {
+        $user = $this->getUser();
+
+        if($user){
+            $paste = $this->getDoctrine()->getRepository('AppBundle:Paste')->findOneBy([
+                'url' => $url
+            ]);
+
+            if($paste){
+                if($paste->getUser() == $user){
+                    return $this->render('default/Paste/confirmDeletePaste.html.twig', [
+                        'user' => $user,
+                        'paste' => $paste
+                    ]);
+                }else{
+                    return $this->redirectToRoute('viewPaste', ['url' => $url]);
+                }
+            }else{
+                return $this->redirectToRoute('myPastes');
+            }
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
      * @Route("/{url}/delete", name="deletePaste")
      * @param $url
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
