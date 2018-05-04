@@ -57,6 +57,8 @@
                              {% elseif paste.privacy == 'private' %}
                                  <a href="{{ path('changePrivacyPaste', {'url': paste.url}) }}" title="Make public"><i class="fa fa-unlock"></i></a>
                              {% endif %}
+
+                             <a href="{{ path('editPaste', {'url': paste.url}) }}" title="Edit Paste"><i class="fa fa-edit"></i></a>
                          {% endif %}
                     {% endif %}
                     <a href="{{ path('reportPaste', {'url': paste.url}) }}"><i class="fa fa-flag remove"></i></a>

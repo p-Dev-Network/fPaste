@@ -607,11 +607,49 @@ class DefaultController extends Controller
 
                     return $this->redirect($request->headers->get('referer'));
                 }
-
-                return $this->redirectToRoute('viewPaste', [
-                    'url' => $url
-                ]);
             }
+
+            return $this->redirectToRoute('viewPaste', [
+                'url' => $url
+            ]);
+        }else{
+            return $this->redirectToRoute('login');
+        }
+    }
+
+    /**
+     * @Route("/{url}/edit", name="editPaste")
+     */
+    public function editPasteAction($url, Request $request)
+    {
+        $user = $this->getUser();
+
+        if($user){
+            $paste = $this->getDoctrine()->getRepository('AppBundle:Paste')->findOneBy([
+                'url' => $url
+            ]);
+
+            if($paste){
+                if($paste->getUser() == $user){
+                    $form = $this->createForm(PasteType::class, $paste);
+                    $form->handleRequest($request);
+
+                    if($form->isSubmitted() && $form->isValid()){
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($paste);
+                        $em->flush();
+
+                        return $this->redirectToRoute('viewPaste', ['url' => $url]);
+                    }
+
+                    return $this->render('default/Paste/editPaste.html.twig', [
+                        'user' => $user,
+                        'form' => $form->createView()
+                    ]);
+                }
+            }
+
+            return $this->redirectToRoute('viewPaste', ['url' => $url]);
         }else{
             return $this->redirectToRoute('login');
         }
