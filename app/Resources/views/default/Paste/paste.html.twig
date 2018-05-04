@@ -71,6 +71,9 @@
             </div>
         </div>
 
+        <div class="col-md-8 m-auto text-center">
+            <div class="addthis_inline_share_toolbox mt30"></div>
+        </div>
 
     {% elseif error == 404 %}
         <div class="alert alert-danger text-center" role="alert">
@@ -89,4 +92,8 @@
         </div>
     {% endif %}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5aec1f1711f22849"></script>
 {% endblock %}
