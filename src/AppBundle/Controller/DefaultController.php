@@ -92,6 +92,18 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/cookies", name="cookiesPolicy")
+     */
+    public function cookiesPolicyAction()
+    {
+        $user = $this->getUser();
+
+        return $this->render('default/Info/cookies.html.twig', [
+            'user' => $user
+        ]);
+    }
+
+    /**
      * @Route("/admin", name="adminIndex")
      */
     public function adminAction()
