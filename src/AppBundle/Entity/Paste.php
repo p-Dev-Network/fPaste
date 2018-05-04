@@ -117,6 +117,29 @@ class Paste
     protected $report;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false)
+     *
+     * @var boolean
+     */
+    protected $sendAsAdmin = false;
+
+    /**
+     * @return bool
+     */
+    public function isSendAsAdmin()
+    {
+        return $this->sendAsAdmin;
+    }
+
+    /**
+     * @param bool $sendAsAdmin
+     */
+    public function setSendAsAdmin($sendAsAdmin)
+    {
+        $this->sendAsAdmin = $sendAsAdmin;
+    }
+
+    /**
      * @return Report
      */
     public function getReport()

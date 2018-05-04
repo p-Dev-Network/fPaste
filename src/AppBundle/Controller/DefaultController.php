@@ -54,6 +54,14 @@ class DefaultController extends Controller
                     $paste->setIsAnonymous(false);
                 }
 
+                if(isset($_POST['asAdmin'])){
+                    if($_POST['asAdmin'] == 'admin'){
+                        $paste->setSendAsAdmin(true);
+                    }
+                }else{
+                    $paste->setSendAsAdmin(false);
+                }
+
                 $paste->setUser($user);
             }else{
                 $paste->setIsAnonymous(true);

@@ -35,10 +35,14 @@
                     </div>
 
                     <div class="col-md-4 text-right responsive-center-header">
-                        {% if paste.isAnonymous %}
-                            Anonymous
+                        {% if paste.sendAsAdmin %}
+                            <b class="remove">Administrator</b>
                         {% else %}
-                            {{ paste.user.username }}
+                            {% if paste.isAnonymous %}
+                                Anonymous
+                            {% else %}
+                                {{ paste.user.username }}
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>

@@ -26,6 +26,12 @@
                 <div class="col-md-12 mb20">
                     <input name="isAnonymous" type="checkbox" value="anonymous"> Send anonymous?
                 </div>
+
+                {% if user.isAdmin %}
+                    <div class="col-md-12 mb20">
+                        <input name="asAdmin" type="checkbox" value="admin"> Send as Admin
+                    </div>
+                {% endif %}
             {% endif %}
 
             <div class="col-md-12 mb20 text-center">
