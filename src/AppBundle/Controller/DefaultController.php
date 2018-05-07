@@ -331,6 +331,18 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/terms", name="terms")
+     */
+    public function termsAction()
+    {
+        $user = $this->getUser();
+
+        return $this->render('default/Info/terms.html.twig', [
+            'user' => $user
+        ]);
+    }
+
+    /**
      * @Route("/privacy", name="privacy")
      */
     public function privacyAction()
@@ -450,6 +462,7 @@ class DefaultController extends Controller
     public function signUpAction(Request $request)
     {
         $user = $this->getUser();
+        $error = 0;
 
         if(!$user){
             $newUser = new User();
@@ -457,20 +470,26 @@ class DefaultController extends Controller
             $form->handleRequest($request);
 
             if($form->isSubmitted() && $form->isValid()){
-                $newUser->setSignUpDate(new \DateTime("now"));
-                $password = $this->get('security.password_encoder');
-                $newUser->setPassword($password->encodePassword($newUser, $form->get('password')->get('first')->getData()));
+                if(isset($_POST['terms']) && $_POST['terms'] == 'terms'){
+                    $newUser->setSignUpDate(new \DateTime("now"));
+                    $password = $this->get('security.password_encoder');
+                    $newUser->setPassword($password->encodePassword($newUser, $form->get('password')->get('first')->getData()));
+                    $newUser->setAcceptedTerms(true);
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($newUser);
-                $em->flush();
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($newUser);
+                    $em->flush();
 
-                return $this->redirectToRoute('login');
+                    return $this->redirectToRoute('login');
+                }
+
+                $error = 500;
             }
 
             return $this->render('default/signUp.html.twig', [
                 'form' => $form->createView(),
-                'user' => $user
+                'user' => $user,
+                'error' => $error
             ]);
         }else{
             return $this->redirectToRoute('homepage');

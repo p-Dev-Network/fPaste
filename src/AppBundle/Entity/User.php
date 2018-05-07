@@ -114,6 +114,29 @@ class User implements UserInterface
     protected $recover;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false)
+     *
+     * @var boolean
+     */
+    protected $acceptedTerms = false;
+
+    /**
+     * @return bool
+     */
+    public function isAcceptedTerms()
+    {
+        return $this->acceptedTerms;
+    }
+
+    /**
+     * @param bool $acceptedTerms
+     */
+    public function setAcceptedTerms($acceptedTerms)
+    {
+        $this->acceptedTerms = $acceptedTerms;
+    }
+
+    /**
      * @return Recover
      */
     public function getRecover()

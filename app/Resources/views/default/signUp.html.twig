@@ -34,7 +34,7 @@
 
                     {% if form_errors(form.username) or form_errors(form.email) or form_errors(form.password.first) %}
                         <div class="alert alert-danger text-center formError" role="alert">
-                            <h2>Error</h2>
+                            <h4>Error</h4>
                             <hr/>
                             {{ form_errors(form.username) }}
                             {{ form_errors(form.password.first) }}
@@ -42,6 +42,12 @@
                         </div>
                     {% endif %}
 
+                    <p><input type="checkbox" name="terms" value="terms"/> I read and accept the <a href="{{ path('terms') }}" target="_blank">Terms and Conditions of Use</a></p>
+                    {% if error == 500 %}
+                        <div class="alert alert-danger" role="alert">
+                            You must accept the Terms and Conditions of Use.
+                        </div>
+                    {% endif %}
                     {{ form_widget(form.SignUp) }}
                 </div>
                 {{ form_end(form) }}
