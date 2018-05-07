@@ -255,6 +255,8 @@ class DefaultController extends Controller
 
     /**
      * @Route("/recover", name="recoverPassword")
+     * @param \Swift_Mailer $mailer
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function recoverPasswordAction(\Swift_Mailer $mailer)
     {
@@ -312,6 +314,8 @@ class DefaultController extends Controller
 
     /**
      * @Route("/changePassword", name="changePassword")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function changePasswordAction(Request $request)
     {
@@ -320,7 +324,6 @@ class DefaultController extends Controller
         if(!$user){
             $email = $_GET['email'];
             $code = $_GET['code'];
-            $error = 0;
 
             $check = $this->getDoctrine()->getRepository('AppBundle:Recover')->findOneBy([
                 'email' => $email,
@@ -439,6 +442,9 @@ class DefaultController extends Controller
 
     /**
      * @Route("/support", name="support")
+     * @param Request $request
+     * @param \Swift_Mailer $mailer
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function supportAction(Request $request, \Swift_Mailer $mailer){
         $user = $this->getUser();
@@ -527,6 +533,7 @@ class DefaultController extends Controller
     /**
      * @Route("/signup", name="signUp")
      * @param Request $request
+     * @param \Swift_Mailer $mailer
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function signUpAction(Request $request, \Swift_Mailer $mailer)
@@ -597,6 +604,8 @@ class DefaultController extends Controller
 
     /**
      * @Route("/search", name="searchPastes")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function searchPastesAction(Request $request)
     {
@@ -651,11 +660,10 @@ class DefaultController extends Controller
     /**
      * @Route("/{url}", name="viewPaste")
      * @param $url
-     * @param Request $request
      * @param AuthenticationUtils $authenticationUtils
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewPasteAction($url, Request $request, AuthenticationUtils $authenticationUtils)
+    public function viewPasteAction($url, AuthenticationUtils $authenticationUtils)
     {
         $user = $this->getUser();
 
@@ -721,6 +729,9 @@ class DefaultController extends Controller
 
     /**
      * @Route("/{url}/changePrivacy", name="changePrivacyPaste")
+     * @param $url
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function changePrivacyPasteAction($url, Request $request)
     {
@@ -757,6 +768,9 @@ class DefaultController extends Controller
 
     /**
      * @Route("/{url}/edit", name="editPaste")
+     * @param $url
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function editPasteAction($url, Request $request)
     {
@@ -795,6 +809,8 @@ class DefaultController extends Controller
 
     /**
      * @Route("/{url}/confirmDelete", name="confirmDelete")
+     * @param $url
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function confirmDeleteAction($url)
     {
@@ -858,6 +874,10 @@ class DefaultController extends Controller
 
     /**
      * @Route("/{url}/report", name="reportPaste")
+     * @param $url
+     * @param Request $request
+     * @param \Swift_Mailer $mailer
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function reportPasteAction($url, Request $request, \Swift_Mailer $mailer)
     {

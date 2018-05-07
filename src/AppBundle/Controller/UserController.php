@@ -3,16 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\MailVerification;
-use AppBundle\Entity\Paste;
-use AppBundle\Entity\User;
 use AppBundle\Form\ChangeMailType;
 use AppBundle\Form\ChangePasswordType;
-use AppBundle\Form\PasteType;
-use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * @Route("/user")
@@ -21,6 +16,9 @@ class UserController extends Controller
 {
     /**
      * @Route("/", name="myAccount")
+     * @param Request $request
+     * @param \Swift_Mailer $mailer
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function myAccountAction(Request $request, \Swift_Mailer $mailer)
     {

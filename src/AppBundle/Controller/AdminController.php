@@ -42,6 +42,8 @@ class AdminController extends Controller
 
     /**
      * @Route("/users/{id}", name="adminUserProfile")
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function adminUserProfile($id)
     {
@@ -72,6 +74,8 @@ class AdminController extends Controller
 
     /**
      * @Route("/users/{id}/suspend", name="adminSuspendUser")
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function adminSuspendUserAction($id)
     {
@@ -99,6 +103,8 @@ class AdminController extends Controller
 
     /**
      * @Route("/users/{id}/approve", name="adminApproveUser")
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function adminApproveUser($id)
     {
@@ -167,6 +173,8 @@ class AdminController extends Controller
 
     /**
      * @Route("/reports/{id}", name="viewReport")
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function viewReportAction($id)
     {
@@ -209,6 +217,8 @@ class AdminController extends Controller
 
     /**
      * @Route("/reports/{id}/close", name="closeReport")
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function closeReportAction($id)
     {
@@ -282,6 +292,8 @@ class AdminController extends Controller
 
     /**
      * @Route("/pastes/{url}", name="adminViewPaste")
+     * @param $url
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function adminViewPasteAction($url)
     {
@@ -318,6 +330,8 @@ class AdminController extends Controller
 
     /**
      * @Route("/pastes/{url}/delete", name="adminDeletePaste")
+     * @param $url
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function adminDeletePasteAction($url)
     {
@@ -402,6 +416,8 @@ class AdminController extends Controller
 
     /**
      * @Route("/support/{id}", name="adminViewTicket")
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function adminViewReportTicket($id)
     {
@@ -444,6 +460,8 @@ class AdminController extends Controller
 
     /**
      * @Route("/support/{id}/close", name="closeTicket")
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function closeTicketAction($id)
     {
