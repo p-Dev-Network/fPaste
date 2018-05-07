@@ -356,6 +356,18 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/donations", name="donations")
+     */
+    public function donationsAction()
+    {
+        $user = $this->getUser();
+
+        return $this->render('default/Info/donations.html.twig', [
+            'user' => $user
+        ]);
+    }
+
+    /**
      * @Route("/faq", name="faq")
      */
     public function faqAction()
