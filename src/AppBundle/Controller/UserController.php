@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\MailVerification;
 use AppBundle\Entity\Paste;
 use AppBundle\Entity\User;
 use AppBundle\Form\ChangeMailType;
@@ -21,7 +22,7 @@ class UserController extends Controller
     /**
      * @Route("/", name="myAccount")
      */
-    public function myAccountAction(Request $request)
+    public function myAccountAction(Request $request, \Swift_Mailer $mailer)
     {
         $user = $this->getUser();
         $error = 0;
@@ -46,6 +47,52 @@ class UserController extends Controller
                 }else{
                     $em->persist($user);
                     $em->flush();
+
+                    $validations = $this->getDoctrine()->getRepository('AppBundle:MailVerification')->findBy([
+                        'user' => $user,
+                        'isUsed' => false,
+                        'isValid' => true
+                    ]);
+
+                    foreach ($validations as $v){
+                        $v->setIsValid(false);
+
+                        $em->persist($v);
+                        $em->flush();
+                    }
+
+                    $code = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+
+                    $verify = new MailVerification();
+                    $verify->setIsUsed(false);
+                    $verify->setDate(new \DateTime("now"));
+                    $verify->setExpiredDate(new \DateTime("now + 24 hours"));
+                    $verify->setEmail($user->getEmail());
+                    $verify->setUser($user);
+                    $verify->setCode($code);
+
+                    $em->persist($verify);
+                    $em->flush();
+
+                    $user->setIsActive(false);
+
+                    $em->persist($user);
+                    $em->flush();
+
+                    $message = (new \Swift_Message('[fPaste.me] Verify your Account'))
+                        ->setFrom('support@fpaste.me')
+                        ->setTo($verify->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'default/Mails/verifyEmail.html.twig', [
+                                    'code' => $code,
+                                    'email' => $verify->getEmail()
+                                ]
+                            ),
+                            'text/html'
+                        );
+
+                    $mailer->send($message);
 
                     $error = 99;
                 }

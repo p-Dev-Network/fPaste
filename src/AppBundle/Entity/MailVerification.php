@@ -75,6 +75,29 @@ class MailVerification
     protected $usedDate;
 
     /**
+     * @ORM\Column(type="boolean", nullable=false)
+     *
+     * @var boolean
+     */
+    protected $isValid = true;
+
+    /**
+     * @return bool
+     */
+    public function isValid()
+    {
+        return $this->isValid;
+    }
+
+    /**
+     * @param bool $isValid
+     */
+    public function setIsValid($isValid)
+    {
+        $this->isValid = $isValid;
+    }
+
+    /**
      * @return int
      */
     public function getId()
