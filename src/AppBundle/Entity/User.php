@@ -55,7 +55,7 @@ class User implements UserInterface
      *
      * @var boolean
      */
-    protected $isActive = true;
+    protected $isActive = false;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
