@@ -118,10 +118,11 @@ class DefaultController extends Controller
                     $verify->setUsedDate(new \DateTime("now"));
                     $verify->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
                     $verify->setIsUsed(true);
+                    $verify->setIsValid(false);
 
                     $em = $this->getDoctrine()->getManager();
-                    //$em->persist($verify);
-                    //$em->flush();
+                    $em->persist($verify);
+                    $em->flush();
 
                     $newUser = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy([
                         'email' => $email
