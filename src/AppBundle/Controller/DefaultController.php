@@ -123,14 +123,14 @@ class DefaultController extends Controller
                     //$em->persist($verify);
                     //$em->flush();
 
-                    $user = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy([
+                    $newUser = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy([
                         'email' => $email
                     ]);
 
-                    if($user){
-                        $user->setIsActive(true);
+                    if($newUser){
+                        $newUser->setIsActive(true);
 
-                        $em->persist($user);
+                        $em->persist($newUser);
                         $em->flush();
                         $error = 0;
                     }else{
