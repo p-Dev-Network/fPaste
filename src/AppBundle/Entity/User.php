@@ -114,6 +114,29 @@ class User implements UserInterface
     protected $recover;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\MailVerification", mappedBy="user")
+     *
+     * @var MailVerification
+     */
+    protected $verify;
+
+    /**
+     * @return MailVerification
+     */
+    public function getVerify()
+    {
+        return $this->verify;
+    }
+
+    /**
+     * @param MailVerification $verify
+     */
+    public function setVerify($verify)
+    {
+        $this->verify = $verify;
+    }
+
+    /**
      * @ORM\Column(type="boolean", nullable=false)
      *
      * @var boolean

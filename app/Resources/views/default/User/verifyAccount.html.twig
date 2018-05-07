@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Verify Account{% endblock %}
+
+{% block body %}
+    <div class="col-md-8 m-auto">
+        {% if error == 1 or error == 2 %}
+            <div class="alert alert-danger" role="alert">
+                This verification link is invalid.
+            </div>
+        {% elseif error == 3 %}
+            <div class="alert alert-danger" role="alert">
+                This verification link has expired.
+            </div>
+        {% elseif error == 0 %}
+            <div class="alert alert-success" role="alert">
+                Account activated. You can now <a href="{{ path('login') }}">Log in</a>.
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

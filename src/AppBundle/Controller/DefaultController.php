@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\MailVerification;
 use AppBundle\Entity\Paste;
 use AppBundle\Entity\Recover;
 use AppBundle\Entity\Report;
@@ -88,6 +89,62 @@ class DefaultController extends Controller
         return $this->render('default/index.html.twig', [
             'form' => $form->createView(),
             'user' => $user
+        ]);
+    }
+
+    /**
+     * @Route("/verify", name="verifyEmail")
+     */
+    public function verifyEmailAction()
+    {
+        $user = $this->getUser();
+        $error = 1;
+
+        if(isset($_GET['email']) && isset($_GET['code'])){
+            $email = $_GET['email'];
+            $code = $_GET['code'];
+
+            $verify = $this->getDoctrine()->getRepository('AppBundle:MailVerification')->findOneBy([
+                'email' => $email,
+                'code' => $code,
+                'isUsed' => false
+            ]);
+
+            if($verify){
+                $actualDate = new \DateTime("now");
+                if($actualDate > $verify->getExpiredDate()){
+                    $error = 3;
+                }else{
+                    $verify->setUsedDate(new \DateTime("now"));
+                    $verify->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
+                    $verify->setIsUsed(true);
+
+                    $em = $this->getDoctrine()->getManager();
+                    //$em->persist($verify);
+                    //$em->flush();
+
+                    $user = $this->getDoctrine()->getRepository('AppBundle:User')->findOneBy([
+                        'email' => $email
+                    ]);
+
+                    if($user){
+                        $user->setIsActive(true);
+
+                        $em->persist($user);
+                        $em->flush();
+                        $error = 0;
+                    }else{
+                        $error = 4;
+                    }
+                }
+            }else{
+                $error = 2;
+            }
+        }
+
+        return $this->render('default/User/verifyAccount.html.twig', [
+            'user' => $user,
+            'error' => $error
         ]);
     }
 
@@ -471,7 +528,7 @@ class DefaultController extends Controller
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function signUpAction(Request $request)
+    public function signUpAction(Request $request, \Swift_Mailer $mailer)
     {
         $user = $this->getUser();
         $error = 0;
@@ -491,6 +548,35 @@ class DefaultController extends Controller
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($newUser);
                     $em->flush();
+
+                    $verify = new MailVerification();
+                    $code = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+                    $verify->setCode($code);
+                    $verify->setUser($newUser);
+                    $verify->setIsUsed(false);
+                    $verify->setEmail($newUser->getEmail());
+                    $verify->setDate(new \DateTime("now"));
+                    $verify->setExpiredDate(new \DateTime("now + 24 hours"));
+                    $verify->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
+                    $verify->setUsedDate(null);
+
+                    $em->persist($verify);
+                    $em->flush();
+
+                    $message = (new \Swift_Message('[fPaste.me] Verify your Account'))
+                        ->setFrom('support@fpaste.me')
+                        ->setTo($verify->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'default/Mails/verifyEmail.html.twig', [
+                                    'code' => $code,
+                                    'email' => $verify->getEmail()
+                                ]
+                            ),
+                            'text/html'
+                        );
+
+                    $mailer->send($message);
 
                     return $this->redirectToRoute('login');
                 }
