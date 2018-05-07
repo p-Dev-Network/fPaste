@@ -92,7 +92,15 @@
 
             <hr/>
 
-            {% block body %}{% endblock %}
+            {% if user and user.isSuspended == true %}
+                <div class="col-md-8 m-auto">
+                    <div class="alert alert-danger">
+                        Your user account has been suspended.
+                    </div>
+                </div>
+            {% else %}
+                {% block body %}{% endblock %}
+            {% endif %}
         </div>
 
         <footer class="page-footer mt30">
