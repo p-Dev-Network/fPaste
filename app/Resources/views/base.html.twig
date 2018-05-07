@@ -80,6 +80,14 @@
             <div class="text-center mt30">
                 <h1>fPaste.me</h1>
                 <p>A free, anonymous, minimalist and open source paste tool.</p>
+
+                {% if user and user.isActive == false %}
+                    <div class="col-md-8 m-auto">
+                        <div class="alert alert-warning" role="alert">
+                            Your account is not activated. Please, check your email.
+                        </div>
+                    </div>
+                {% endif %}
             </div>
 
             <hr/>
