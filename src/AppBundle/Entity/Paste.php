@@ -117,6 +117,29 @@ class Paste
     protected $report;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     *
+     * @var string
+     */
+    protected $name_hnp99;
+
+    /**
+     * @return string
+     */
+    public function getNameHnp99()
+    {
+        return $this->name_hnp99;
+    }
+
+    /**
+     * @param string $name_hnp99
+     */
+    public function setNameHnp99($name_hnp99)
+    {
+        $this->name_hnp99 = $name_hnp99;
+    }
+
+    /**
      * @ORM\Column(type="boolean", nullable=false)
      *
      * @var boolean

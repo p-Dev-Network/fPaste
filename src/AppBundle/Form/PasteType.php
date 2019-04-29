@@ -48,6 +48,14 @@ class PasteType extends AbstractType
                     'Private' => 'private'
                 ]
             ])
+            ->add('name_hnp99', TextType::class, [
+                'label' => false,
+                'required' => false,
+                'attr' => [
+                    'class' => 'hide',
+                    'placeholder' => 'Name: '
+                ]
+            ])
             ->add('Send', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-lg btn-send is-valid'

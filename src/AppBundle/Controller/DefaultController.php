@@ -38,52 +38,59 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            if(!$paste->getTitle()){
-                $paste->setTitle('Untitled');
+            if(!$paste->getNameHnp99()){
+                $paste->setNameHnp99('null');
+
+                if(!$paste->getTitle()){
+                    $paste->setTitle('Untitled');
+                }
+
+                $paste->setDate(new \DateTime("now"));
+                $paste->setDeleteDate(null);
+                $paste->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
+
+                if($user){
+                    if(isset($_POST['isAnonymous'])){
+                        if($_POST['isAnonymous'] == 'anonymous'){
+                            $paste->setIsAnonymous(true);
+                        }
+                    }else{
+                        $paste->setIsAnonymous(false);
+                    }
+
+                    if(isset($_POST['asAdmin'])){
+                        if($_POST['asAdmin'] == 'admin'){
+                            $paste->setSendAsAdmin(true);
+                        }
+                    }else{
+                        $paste->setSendAsAdmin(false);
+                    }
+
+                    $paste->setUser($user);
+                }else{
+                    $paste->setIsAnonymous(true);
+                }
+
+                do{
+                    $url = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
+                    $check = $em->getRepository('AppBundle:Paste')->findOneBy([
+                        'url' => $url
+                    ]);
+
+                    if(!$check){
+                        $paste->setUrl($url);
+                        $uniqueURL = true;
+                    }
+                }while($uniqueURL == false);
+
+                $em->persist($paste);
+                $em->flush();
+
+                return $this->redirectToRoute('viewPaste', ['url' => $url]);
+            } else {
+                return $this->redirectToRoute('homepage');
             }
 
-            $paste->setDate(new \DateTime("now"));
-            $paste->setDeleteDate(null);
-            $paste->setIP($this->container->get('request_stack')->getCurrentRequest()->getClientIp());
-
-            if($user){
-                if(isset($_POST['isAnonymous'])){
-                    if($_POST['isAnonymous'] == 'anonymous'){
-                        $paste->setIsAnonymous(true);
-                    }
-                }else{
-                    $paste->setIsAnonymous(false);
-                }
-
-                if(isset($_POST['asAdmin'])){
-                    if($_POST['asAdmin'] == 'admin'){
-                        $paste->setSendAsAdmin(true);
-                    }
-                }else{
-                    $paste->setSendAsAdmin(false);
-                }
-
-                $paste->setUser($user);
-            }else{
-                $paste->setIsAnonymous(true);
-            }
-
-            do{
-                $url = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 10);
-                $check = $em->getRepository('AppBundle:Paste')->findOneBy([
-                    'url' => $url
-                ]);
-
-                if(!$check){
-                    $paste->setUrl($url);
-                    $uniqueURL = true;
-                }
-            }while($uniqueURL == false);
-
-            $em->persist($paste);
-            $em->flush();
-
-            return $this->redirectToRoute('viewPaste', ['url' => $url]);
         }
 
         return $this->render('default/index.html.twig', [
